@@ -14,12 +14,17 @@ namespace WordSolver
         {
             get; private set; 
         }
+        public LetterUtil.Letter LetterEnum
+        {
+            get; private set;
+        }
         private int Depth;
 
         public Node(CharEnumerator subword, int depth) : base()
         {
             Depth = depth;
             Letter = subword.Current;
+            LetterEnum = LetterUtil.GetLetter(Letter);
 
             if (subword.MoveNext())
             {
