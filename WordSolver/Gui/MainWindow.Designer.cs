@@ -37,6 +37,9 @@
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quickEnterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pb1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -45,17 +48,23 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dictStatusLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dictSizeLabel = new System.Windows.Forms.Label();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quickEnterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dictSaver = new System.ComponentModel.BackgroundWorker();
-            this.dictStatusLabel = new System.Windows.Forms.Label();
+            this.dictListBox = new System.Windows.Forms.ListBox();
+            this.dictPopulateList = new System.ComponentModel.BackgroundWorker();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.gameTypeCombo = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // wordInput
@@ -64,6 +73,7 @@
             this.wordInput.Name = "wordInput";
             this.wordInput.Size = new System.Drawing.Size(171, 20);
             this.wordInput.TabIndex = 1;
+            this.wordInput.TextChanged += new System.EventHandler(this.wordInput_TextChanged);
             // 
             // checkWordButton
             // 
@@ -90,7 +100,7 @@
             this.gridToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(772, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(799, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -110,29 +120,50 @@
             this.addFileToolStripMenuItem,
             this.addFolderToolStripMenuItem});
             this.dictionaryToolStripMenuItem.Name = "dictionaryToolStripMenuItem";
-            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.dictionaryToolStripMenuItem.Text = "Dictionary";
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // addFileToolStripMenuItem
             // 
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.addFileToolStripMenuItem.Text = "Add File";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
             // 
             // addFolderToolStripMenuItem
             // 
             this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
-            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.addFolderToolStripMenuItem.Text = "Add Folder";
             this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.addFolderToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            // 
+            // gridToolStripMenuItem
+            // 
+            this.gridToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.quickEnterToolStripMenuItem});
+            this.gridToolStripMenuItem.Name = "gridToolStripMenuItem";
+            this.gridToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.gridToolStripMenuItem.Text = "Grid";
+            // 
+            // quickEnterToolStripMenuItem
+            // 
+            this.quickEnterToolStripMenuItem.Name = "quickEnterToolStripMenuItem";
+            this.quickEnterToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.quickEnterToolStripMenuItem.Text = "Quick Enter";
+            this.quickEnterToolStripMenuItem.Click += new System.EventHandler(this.quickEnterToolStripMenuItem_Click);
             // 
             // pb1
             // 
@@ -150,26 +181,23 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(772, 443);
+            this.tabControl1.Size = new System.Drawing.Size(799, 451);
             this.tabControl1.TabIndex = 5;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.findWordsButton);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.panel1);
-            this.tabPage1.Controls.Add(this.comboBox1);
+            this.tabPage1.Controls.Add(this.splitContainer1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(764, 417);
+            this.tabPage1.Size = new System.Drawing.Size(791, 425);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Word Finder";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // findWordsButton
             // 
-            this.findWordsButton.Location = new System.Drawing.Point(226, 2);
+            this.findWordsButton.Location = new System.Drawing.Point(74, 288);
             this.findWordsButton.Name = "findWordsButton";
             this.findWordsButton.Size = new System.Drawing.Size(75, 23);
             this.findWordsButton.TabIndex = 4;
@@ -179,8 +207,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 7);
+            this.label2.Location = new System.Drawing.Point(29, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 3;
@@ -188,22 +217,21 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Location = new System.Drawing.Point(0, 30);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(764, 387);
+            this.panel1.Size = new System.Drawing.Size(537, 419);
             this.panel1.TabIndex = 2;
             // 
             // comboBox1
             // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "3 x 3",
             "4 x 4"});
-            this.comboBox1.Location = new System.Drawing.Point(65, 3);
+            this.comboBox1.Location = new System.Drawing.Point(87, 48);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(152, 21);
             this.comboBox1.TabIndex = 1;
@@ -211,6 +239,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.dictListBox);
             this.tabPage2.Controls.Add(this.dictStatusLabel);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Controls.Add(this.dictSizeLabel);
@@ -224,6 +253,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Dictionary Info";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dictStatusLabel
+            // 
+            this.dictStatusLabel.AutoSize = true;
+            this.dictStatusLabel.Location = new System.Drawing.Point(7, 372);
+            this.dictStatusLabel.Name = "dictStatusLabel";
+            this.dictStatusLabel.Size = new System.Drawing.Size(43, 13);
+            this.dictStatusLabel.TabIndex = 7;
+            this.dictStatusLabel.Text = "Status: ";
             // 
             // label1
             // 
@@ -243,59 +281,94 @@
             this.dictSizeLabel.TabIndex = 5;
             this.dictSizeLabel.Text = "Dictionary Size:";
             // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            // 
-            // gridToolStripMenuItem
-            // 
-            this.gridToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.quickEnterToolStripMenuItem});
-            this.gridToolStripMenuItem.Name = "gridToolStripMenuItem";
-            this.gridToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.gridToolStripMenuItem.Text = "Grid";
-            // 
-            // quickEnterToolStripMenuItem
-            // 
-            this.quickEnterToolStripMenuItem.Name = "quickEnterToolStripMenuItem";
-            this.quickEnterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.quickEnterToolStripMenuItem.Text = "Quick Enter";
-            this.quickEnterToolStripMenuItem.Click += new System.EventHandler(this.quickEnterToolStripMenuItem_Click);
-            // 
             // dictSaver
             // 
             this.dictSaver.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictSaver_DoWork);
             this.dictSaver.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictSaver_RunWorkerCompleted);
             // 
-            // dictStatusLabel
+            // dictListBox
             // 
-            this.dictStatusLabel.AutoSize = true;
-            this.dictStatusLabel.Location = new System.Drawing.Point(7, 372);
-            this.dictStatusLabel.Name = "dictStatusLabel";
-            this.dictStatusLabel.Size = new System.Drawing.Size(43, 13);
-            this.dictStatusLabel.TabIndex = 7;
-            this.dictStatusLabel.Text = "Status: ";
+            this.dictListBox.FormattingEnabled = true;
+            this.dictListBox.Location = new System.Drawing.Point(11, 157);
+            this.dictListBox.Name = "dictListBox";
+            this.dictListBox.Size = new System.Drawing.Size(260, 212);
+            this.dictListBox.TabIndex = 8;
             // 
-            // Form1
+            // dictPopulateList
+            // 
+            this.dictPopulateList.WorkerSupportsCancellation = true;
+            this.dictPopulateList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictPopulateList_DoWork);
+            this.dictPopulateList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictPopulateList_RunWorkerCompleted);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer1.IsSplitterFixed = true;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.label3);
+            this.splitContainer1.Panel2.Controls.Add(this.gameTypeCombo);
+            this.splitContainer1.Panel2.Controls.Add(this.findWordsButton);
+            this.splitContainer1.Panel2.Controls.Add(this.comboBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.label2);
+            this.splitContainer1.Size = new System.Drawing.Size(785, 419);
+            this.splitContainer1.SplitterDistance = 537;
+            this.splitContainer1.TabIndex = 5;
+            // 
+            // gameTypeCombo
+            // 
+            this.gameTypeCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gameTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gameTypeCombo.FormattingEnabled = true;
+            this.gameTypeCombo.Items.AddRange(new object[] {
+            "Grid",
+            "Anagram"});
+            this.gameTypeCombo.Location = new System.Drawing.Point(87, 11);
+            this.gameTypeCombo.Name = "gameTypeCombo";
+            this.gameTypeCombo.Size = new System.Drawing.Size(152, 21);
+            this.gameTypeCombo.TabIndex = 5;
+            this.gameTypeCombo.SelectedIndexChanged += new System.EventHandler(this.gameTypeCombo_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Problem Type:";
+            // 
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(772, 467);
+            this.ClientSize = new System.Drawing.Size(799, 475);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "MainWindow";
             this.Text = "Form1";
             this.Shown += new System.EventHandler(this.MainWindowShown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -327,6 +400,11 @@
         private System.Windows.Forms.ToolStripMenuItem quickEnterToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker dictSaver;
         private System.Windows.Forms.Label dictStatusLabel;
+        private System.Windows.Forms.ListBox dictListBox;
+        private System.ComponentModel.BackgroundWorker dictPopulateList;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox gameTypeCombo;
     }
 }
 

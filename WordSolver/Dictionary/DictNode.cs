@@ -196,5 +196,56 @@ namespace WordSolver.Dictionary
             }
             return _word;
         }
+
+        public void WordSearch(List<String> solns)
+        {
+            if (IsWord)
+            {
+                solns.Add(this.ToString());
+                if (solns.Count >= 100)
+                {
+                    return;
+                }
+            }
+
+            foreach (DictNode n in Children)
+            {
+                n.WordSearch(solns);
+            }
+        }
+
+        public void WordSearch(CharEnumerator wordEnum, List<String> solns)
+        {
+            if (!wordEnum.MoveNext())
+            {
+                if (IsWord)
+                {
+                    solns.Add(this.ToString());
+                    if (solns.Count >= 100)
+                    {
+                        return;
+                    }
+                }
+
+                foreach (DictNode n in Children)
+                {
+                    n.WordSearch(solns);
+                    if (solns.Count >= 100)
+                    {
+                        return;
+                    }
+                }
+                return;
+            }
+
+            LetterUtil.Letter letter = LetterUtil.GetLetter(wordEnum.Current);
+            foreach (DictNode n in Children)
+            {
+                if (letter == n.LetterEnum)
+                {
+                    n.WordSearch(wordEnum, solns);
+                }
+            }
+        }
     }
 }

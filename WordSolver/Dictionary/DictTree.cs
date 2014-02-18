@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using WordSolver.Grid;
+using WordSolver.Util;
 
 namespace WordSolver.Dictionary
 {
@@ -134,6 +135,24 @@ namespace WordSolver.Dictionary
             foreach (DictNode n in Children)
             {
                 n.WriteToStream(sw, true);
+            }
+        }
+
+        public void WordSearch(String partialWord, List<String> solns)
+        {
+            CharEnumerator wordEnum = partialWord.GetEnumerator();
+            if (!wordEnum.MoveNext())
+            {
+                return;
+            }
+
+            LetterUtil.Letter letter = LetterUtil.GetLetter(wordEnum.Current);
+            foreach (DictNode n in Children)
+            {
+                if (letter == n.LetterEnum)
+                {
+                    n.WordSearch(wordEnum, solns);
+                }
             }
         }
     }

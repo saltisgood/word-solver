@@ -12,6 +12,7 @@ using Microsoft.VisualBasic;
 using WordSolver.Dictionary;
 using WordSolver.Grid;
 using WordSolver.Util;
+using System.Threading;
 
 namespace WordSolver.Gui
 {
@@ -240,6 +241,8 @@ namespace WordSolver.Gui
             }
         }
 
+        
+
         #endregion
 
         #region Dictionary Loading
@@ -450,5 +453,82 @@ namespace WordSolver.Gui
         }
 
         #endregion 
+
+        private void wordInput_TextChanged(object sender, EventArgs e)
+        {
+            if (Tree.WordCount > 0)
+            {
+                dictListBox.Items.Clear();
+                if (dictPopulateList.IsBusy)
+                {
+                    dictPopulateList.CancelAsync();
+                    while (dictPopulateList.IsBusy)
+                    {
+                        Thread.Sleep(50);
+                    }
+                }
+                dictPopulateList.RunWorkerAsync(wordInput.Text);
+            }
+        }
+
+        private void dictPopulateList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            String input;
+            if (e == null || e.Argument == null || (input = e.Argument as String) == null)
+            {
+                return;
+            }
+
+            List<String> solns = new List<string>();
+            Tree.WordSearch(input, solns);
+
+            e.Result = solns;
+        }
+
+        private void dictPopulateList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            List<String> solns;
+            if (e == null || e.Result == null || (solns = e.Result as List<String>) == null)
+            {
+                return;
+            }
+
+            foreach (String str in solns)
+            {
+                dictListBox.Items.Add(str);
+            }
+        }
+
+        private void gameTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (gameTypeCombo.SelectedIndex)
+            {
+                case 0:
+                    comboBox1.Enabled = true;
+                    break;
+                case 1:
+                    comboBox1.Enabled = false;
+                    String result = Interaction.InputBox("Enter the letters to be solved, without spaces", "Enter the anagram", string.Empty);
+                    if (String.IsNullOrWhiteSpace(result))
+                    {
+                        gameTypeCombo.SelectedIndex = 0;
+                        return;
+                    }
+                    result = result.Trim();
+                    int y = result.Length / LetterGrid.GRID_MAX_X + 1;
+                    int x = result.Length % LetterGrid.GRID_MAX_X;
+                    Grid.SetGridSize(x, y);
+
+                    for (int i = 0; i < result.Length; i++)
+                    {
+                        Grid.SetButtonValue(i, LetterUtil.GetLetter(result[i]));
+                    }
+
+                    panel1.Controls.Clear();
+                    panel1.Controls.AddRange(Grid.GetControls());
+
+                    break;
+            }
+        }
     }
 }
