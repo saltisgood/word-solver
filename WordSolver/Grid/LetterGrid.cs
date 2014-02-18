@@ -33,10 +33,12 @@ namespace WordSolver.Grid
         /// The current size of the grid in the y-direction
         /// </summary>
         public int Y { get; private set; }
+
         /// <summary>
         /// The 2-D array of buttons that are used in this grid
         /// </summary>
         private LetterButton[][] Buttons;
+        private Node[][] NodeList;
 
         /// <summary>
         /// Constructor. Nothing much to say.
@@ -123,71 +125,95 @@ namespace WordSolver.Grid
         /// Find all the words in the given dictionary tree
         /// </summary>
         /// <param name="tree">The tree to search</param>
-        public void FindWords(DictTree tree)
+        public void FindWords(DictTree tree, GameOptions options)
         {
-            Node[][] nodes = new Node[Y][];
+            NodeList = new Node[Y][];
             for (int y = 0; y < Y; y++)
             {
-                nodes[y] = new Node[X];
+                NodeList[y] = new Node[X];
                 for (int x = 0; x < X; x++)
                 {
-                    nodes[y][x] = new Node(x, y, Buttons[y][x].SelectedLetter);
+                    NodeList[y][x] = new Node(this, x, y, Buttons[y][x].SelectedLetter, Buttons[y][x].IsRequired);
                 }
             }
 
-            SetupAdjNodes(nodes);
-            Solve(nodes, tree);
+            SetupAdjNodes(options.IsAnagram);
+            Solve(tree);
         }
 
         /// <summary>
         /// Setup the adjacent node list in the 2-D node list. These are the nodes that are directly
         /// adjacent to each node, cached for speed.
         /// </summary>
-        /// <param name="nodes"></param>
-        private void SetupAdjNodes(Node[][] nodes)
+        private void SetupAdjNodes(bool isAnagram)
         {
-            for (int y = 0; y < Y; y++)
+            if (!isAnagram)
             {
-                for (int x = 0; x < X; x++)
+                #region lots of space
+                for (int y = 0; y < Y; y++)
                 {
-                    if (y != 0)
+                    for (int x = 0; x < X; x++)
                     {
-                        nodes[y][x].AddAdjacentNode(nodes[y - 1][x]);
+                        if (y != 0)
+                        {
+                            NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x]);
+
+                            if (x != 0)
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x - 1]);
+                            }
+
+                            if (x < (X - 1))
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x + 1]);
+                            }
+                        }
+
+                        if (y < (Y - 1))
+                        {
+                            NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x]);
+
+                            if (x != 0)
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x - 1]);
+                            }
+
+                            if (x < (X - 1))
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x + 1]);
+                            }
+                        }
 
                         if (x != 0)
                         {
-                            nodes[y][x].AddAdjacentNode(nodes[y - 1][x - 1]);
+                            NodeList[y][x].AddAdjacentNode(NodeList[y][x - 1]);
                         }
 
                         if (x < (X - 1))
                         {
-                            nodes[y][x].AddAdjacentNode(nodes[y - 1][x + 1]);
+                            NodeList[y][x].AddAdjacentNode(NodeList[y][x + 1]);
                         }
                     }
-
-                    if (y < (Y - 1))
+                }
+                #endregion
+            }
+            else
+            {
+                for (int y = 0; y < Y; y++)
+                {
+                    for (int x = 0; x < X; x++)
                     {
-                        nodes[y][x].AddAdjacentNode(nodes[y + 1][x]);
-
-                        if (x != 0)
+                        for (int y1 = 0; y1 < Y; y1++)
                         {
-                            nodes[y][x].AddAdjacentNode(nodes[y + 1][x - 1]);
+                            for (int x1 = 0; x1 < X; x1++)
+                            {
+                                if (x == x1 && y == y1)
+                                {
+                                    continue;
+                                }
+                                NodeList[y][x].AddAdjacentNode(NodeList[y1][x1]);
+                            }
                         }
-
-                        if (x < (X - 1))
-                        {
-                            nodes[y][x].AddAdjacentNode(nodes[y + 1][x + 1]);
-                        }
-                    }
-
-                    if (x != 0)
-                    {
-                        nodes[y][x].AddAdjacentNode(nodes[y][x - 1]);
-                    }
-
-                    if (x < (X - 1))
-                    {
-                        nodes[y][x].AddAdjacentNode(nodes[y][x + 1]);
                     }
                 }
             }
@@ -196,17 +222,31 @@ namespace WordSolver.Grid
         /// <summary>
         /// Perform the actual word search of the 2-D node array with the dictionary tree
         /// </summary>
-        /// <param name="nodes">The 2-D node array. Should already setup with adjacent nodes populated and whatnot</param>
         /// <param name="tree">The dictionary tree to search</param>
-        private void Solve(Node[][] nodes, DictTree tree)
+        private void Solve(DictTree tree)
         {
             for (int y = 0; y < Y; y++)
             {
                 for (int x = 0; x < X; x++)
                 {
-                    tree.FindAllWords(nodes[y][x]);
+                    tree.FindAllWords(NodeList[y][x]);
                 }
             }
+        }
+
+        public bool CheckForMandatoryNodes(Node finalNode)
+        {
+            foreach (Node[] nodes in NodeList)
+            {
+                foreach (Node n in nodes)
+                {
+                    if (n.IsMandatory && !n.IsUsed && n != finalNode)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -236,6 +276,8 @@ namespace WordSolver.Grid
             /// A list of the other nodes in the grid that are directly adjacent to this one
             /// </summary>
             public List<Node> AdjacentNodes { get; private set; }
+            public bool IsMandatory { get; private set; }
+            public LetterGrid ParentGrid { get; private set; }
 
             /// <summary>
             /// Constructor.
@@ -243,12 +285,18 @@ namespace WordSolver.Grid
             /// <param name="x">The X-coordinate of this node in the grid</param>
             /// <param name="y">The Y-coordinate of this node in the grid</param>
             /// <param name="letter">The Letter enum to be used for this node</param>
-            public Node(int x, int y, LetterUtil.Letter letter)
+            public Node(LetterGrid parentGrid, int x, int y, LetterUtil.Letter letter, bool isMandatory)
             {
+                ParentGrid = parentGrid;
                 X = x;
                 Y = y;
                 Letter = letter;
                 AdjacentNodes = new List<Node>();
+                IsMandatory = isMandatory;
+            }
+
+            public Node(LetterGrid parentGrid, int x, int y, LetterButton button) : this(parentGrid, x, y, button.SelectedLetter, button.IsRequired)
+            {
             }
 
             /// <summary>

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dictionary\DictTree.cs" />
+    <Compile Include="Grid\GameOptions.cs" />
     <Compile Include="Gui\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

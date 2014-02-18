@@ -140,7 +140,7 @@ namespace WordSolver.Dictionary
         /// <param name="node">The node in the LetterGrid that should align with this node in the dictionary tree</param>
         public void FindAllWords(LetterGrid.Node node)
         {
-            if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1))
+            if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.ParentGrid.CheckForMandatoryNodes(node))
             {
                 Solutions.AddWord(this.ToString());
             }

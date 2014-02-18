@@ -54,8 +54,8 @@ namespace WordSolver.Gui
         {
             InitializeComponent();
             Grid = new LetterGrid(4, 4);
-            tabControl1.SelectedIndex = 1;
             comboBox1.SelectedIndex = 1;
+            gameTypeCombo.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -182,15 +182,11 @@ namespace WordSolver.Gui
                     Grid.SetGridSize(3, 3);
                     panel1.Controls.AddRange(Grid.GetControls());
                     GridIndex = 0;
-                    this.MinimumSize = new Size(337, 431);
-                    this.Size = new Size(337, 431);
                     break;
                 case 1:
                     Grid.SetGridSize(4, 4);
                     panel1.Controls.AddRange(Grid.GetControls());
                     GridIndex = 1;
-                    this.MinimumSize = new Size(442, 537);
-                    this.Size = new Size(442, 537);
                     break;
             }
         }
@@ -203,7 +199,7 @@ namespace WordSolver.Gui
         private void findWordsClick(object sender, EventArgs e)
         {
             Solutions.Reset();
-            Grid.FindWords(Tree);
+            Grid.FindWords(Tree, new GameOptions(!connectingLetterCheck.Checked));
             MessageBox.Show("Found: " + Solutions.Count + " words", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             Solutions.Finish();
             new Results().ShowDialog();
@@ -408,7 +404,6 @@ namespace WordSolver.Gui
                 if (result.Value)
                 {
                     dictSizeLabel.Text = DICT_LABEL_PROMPT + Tree.WordCount;
-                    MessageBox.Show("Done");
                 }
                 else
                 {
@@ -417,7 +412,7 @@ namespace WordSolver.Gui
             }
 
             pb1.Hide();
-            label1.Hide();
+            dictStatusLabel.Hide();
 
             if (!File.Exists(getDictionaryPath()) && Tree.WordCount > 0)
             {
@@ -505,9 +500,11 @@ namespace WordSolver.Gui
             {
                 case 0:
                     comboBox1.Enabled = true;
+                    connectingLetterCheck.Enabled = true;
                     break;
                 case 1:
                     comboBox1.Enabled = false;
+                    connectingLetterCheck.Enabled = false;
                     String result = Interaction.InputBox("Enter the letters to be solved, without spaces", "Enter the anagram", string.Empty);
                     if (String.IsNullOrWhiteSpace(result))
                     {
