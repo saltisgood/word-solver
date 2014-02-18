@@ -4,10 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WordSolver
+namespace WordSolver.Util
 {
+    /// <summary>
+    /// Collection of utilities for working with letters
+    /// </summary>
     public static class LetterUtil
     {
+        /// <summary>
+        /// An enum of the alphabet
+        /// </summary>
         public enum Letter
         {
             A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10,
@@ -15,6 +21,11 @@ namespace WordSolver
             V = 21, W = 22, X = 23, Y = 24, Z = 25, UNKNOWN = 26
         }
 
+        /// <summary>
+        /// Get an enum from a char value
+        /// </summary>
+        /// <param name="c">The char value to convert</param>
+        /// <returns>The enum representation</returns>
         public static Letter GetLetter(char c)
         {
             switch (c)
@@ -76,6 +87,11 @@ namespace WordSolver
             }
         }
 
+        /// <summary>
+        /// Convert an enum to a string representation
+        /// </summary>
+        /// <param name="letter">The enum to convert</param>
+        /// <returns>The string representation</returns>
         public static String ConvertToString(Letter letter)
         {
             switch (letter)

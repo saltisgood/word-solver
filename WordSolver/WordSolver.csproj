@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,32 +45,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictTree.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Dictionary\DictTree.cs" />
+    <Compile Include="Gui\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Gui\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="LetterGrid.cs" />
-    <Compile Include="LetterButton.cs">
+    <Compile Include="Grid\LetterGrid.cs" />
+    <Compile Include="Gui\LetterButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="LetterSelectForm.cs">
+    <Compile Include="Gui\LetterSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LetterSelectForm.Designer.cs">
+    <Compile Include="Gui\LetterSelectForm.Designer.cs">
       <DependentUpon>LetterSelectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LetterUtil.cs" />
-    <Compile Include="TreeTraverse.cs" />
-    <Compile Include="Node.cs" />
+    <Compile Include="Util\LetterUtil.cs" />
+    <Compile Include="Dictionary\NodeSorter.cs" />
+    <Compile Include="Gui\Results.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\Results.Designer.cs">
+      <DependentUpon>Results.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Util\Solutions.cs" />
+    <Compile Include="Util\SolutionSorter.cs" />
+    <Compile Include="Dictionary\TreeTraverse.cs" />
+    <Compile Include="Dictionary\DictNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Gui\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LetterSelectForm.resx">
+    <EmbeddedResource Include="Gui\LetterSelectForm.resx">
       <DependentUpon>LetterSelectForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -81,6 +91,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Gui\Results.resx">
+      <DependentUpon>Results.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

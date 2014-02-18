@@ -1,4 +1,4 @@
-﻿namespace WordSolver
+﻿namespace WordSolver.Gui
 {
     partial class LetterSelectForm
     {
