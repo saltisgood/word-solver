@@ -46,6 +46,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.connectingLetterCheck = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.gameTypeCombo = new System.Windows.Forms.ComboBox();
             this.findWordsButton = new System.Windows.Forms.Button();
@@ -58,9 +60,8 @@
             this.dictSizeLabel = new System.Windows.Forms.Label();
             this.dictSaver = new System.ComponentModel.BackgroundWorker();
             this.dictPopulateList = new System.ComponentModel.BackgroundWorker();
-            this.connectingLetterCheck = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -122,36 +123,37 @@
             this.dictionaryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.resetToolStripMenuItem,
             this.addFileToolStripMenuItem,
-            this.addFolderToolStripMenuItem});
+            this.addFolderToolStripMenuItem,
+            this.saveToolStripMenuItem});
             this.dictionaryToolStripMenuItem.Name = "dictionaryToolStripMenuItem";
-            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dictionaryToolStripMenuItem.Text = "Dictionary";
             // 
             // resetToolStripMenuItem
             // 
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.resetToolStripMenuItem.Text = "Reset";
             this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // addFileToolStripMenuItem
             // 
             this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.addFileToolStripMenuItem.Text = "Add File";
             this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
             // 
             // addFolderToolStripMenuItem
             // 
             this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
-            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.addFolderToolStripMenuItem.Text = "Add Folder";
             this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.addFolderToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // gridToolStripMenuItem
@@ -232,6 +234,30 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(513, 419);
             this.panel1.TabIndex = 2;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 92);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(99, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Connecting Letters:";
+            // 
+            // connectingLetterCheck
+            // 
+            this.connectingLetterCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.connectingLetterCheck.AutoSize = true;
+            this.connectingLetterCheck.Checked = true;
+            this.connectingLetterCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.connectingLetterCheck.Location = new System.Drawing.Point(111, 91);
+            this.connectingLetterCheck.Name = "connectingLetterCheck";
+            this.connectingLetterCheck.Size = new System.Drawing.Size(15, 14);
+            this.connectingLetterCheck.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.connectingLetterCheck, "Check if you only want solutions where the letters can join each other in the gri" +
+        "d, i.e. if you have to be able to draw a line between the letters.");
+            this.connectingLetterCheck.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -354,29 +380,12 @@
             this.dictPopulateList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictPopulateList_DoWork);
             this.dictPopulateList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictPopulateList_RunWorkerCompleted);
             // 
-            // connectingLetterCheck
+            // saveToolStripMenuItem
             // 
-            this.connectingLetterCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.connectingLetterCheck.AutoSize = true;
-            this.connectingLetterCheck.Checked = true;
-            this.connectingLetterCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.connectingLetterCheck.Location = new System.Drawing.Point(111, 91);
-            this.connectingLetterCheck.Name = "connectingLetterCheck";
-            this.connectingLetterCheck.Size = new System.Drawing.Size(15, 14);
-            this.connectingLetterCheck.TabIndex = 7;
-            this.toolTip1.SetToolTip(this.connectingLetterCheck, "Check if you only want solutions where the letters can join each other in the gri" +
-        "d, i.e. if you have to be able to draw a line between the letters.");
-            this.connectingLetterCheck.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 92);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(99, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Connecting Letters:";
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -439,6 +448,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox connectingLetterCheck;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
     }
 }
 

@@ -157,9 +157,24 @@ namespace WordSolver.Dictionary
             }
         }
 
-        public void RemoveWord(String word)
+        public bool RemoveWord(String word)
         {
+            CharEnumerator charEnum = word.GetEnumerator();
+            if (!charEnum.MoveNext())
+            {
+                return false;
+            }
 
+            char c = charEnum.Current;
+
+            foreach (DictNode n in Children)
+            {
+                if (n.Letter == c)
+                {
+                    return n.RemoveWord(charEnum);
+                }
+            }
+            return false;
         }
     }
 }

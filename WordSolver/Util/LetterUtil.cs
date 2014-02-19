@@ -18,8 +18,8 @@ namespace WordSolver.Util
         {
             A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10,
             L = 11, M = 12, N = 13, O = 14, P = 15, Q = 16, R = 17, S = 18, T = 19, U = 20,
-            V = 21, W = 22, X = 23, Y = 24, Z = 25, UNKNOWN = -1, AR = 26, CH = 27, ER = 28,
-            EST = 29, RE = 30, TO = 31, VE = 32
+            V = 21, W = 22, X = 23, Y = 24, Z = 25, UNKNOWN = -1, AR = 26, CH = 27, DE = 28,
+            ER = 29, EST = 30, RE = 31, TO = 32, VE = 33
         }
 
         /// <summary>
@@ -163,6 +163,8 @@ namespace WordSolver.Util
                     return "TO";
                 case Letter.VE:
                     return "VE";
+                case Letter.DE:
+                    return "DE";
                 case Letter.UNKNOWN: default:
                     return "UNKNOWN";
             }
@@ -356,6 +358,15 @@ namespace WordSolver.Util
                     {
                         return Letter.T;
                     }
+                case Letter.DE:
+                    if (pos == 0)
+                    {
+                        return Letter.D;
+                    }
+                    else
+                    {
+                        return Letter.E;
+                    }
                 default:
                     throw new NotImplementedException();
             }
@@ -381,6 +392,7 @@ namespace WordSolver.Util
                 case Letter.ER:
                 case Letter.AR:
                 case Letter.CH:
+                case Letter.DE:
                 case Letter.RE:
                 case Letter.TO:
                 case Letter.VE:

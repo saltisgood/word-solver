@@ -202,7 +202,7 @@ namespace WordSolver.Gui
             Grid.FindWords(Tree, new GameOptions(!connectingLetterCheck.Checked));
             MessageBox.Show("Found: " + Solutions.Count + " words", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             Solutions.Finish();
-            new Results().ShowDialog();
+            new Results(Tree).ShowDialog();
         }
 
         /// <summary>
@@ -300,6 +300,7 @@ namespace WordSolver.Gui
             pb1.Show();
             dictStatusLabel.Text = DICT_STATUS_LABEL_PROMPT + "Loading...";
             dictStatusLabel.Show();
+            dictionaryToolStripMenuItem.Enabled = false;
             SaveWhenFinished = postSave;
         }
 
@@ -413,11 +414,28 @@ namespace WordSolver.Gui
 
             pb1.Hide();
             dictStatusLabel.Hide();
+            dictionaryToolStripMenuItem.Enabled = true;
 
             if (!File.Exists(getDictionaryPath()) && Tree.WordCount > 0)
             {
-                dictSaver.RunWorkerAsync();
+                preSaveDict(null);
             }
+        }
+
+        
+        #endregion 
+
+        #region Dictionary saving
+        
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            preSaveDict(true);
+        }
+
+        private void preSaveDict(object bgArgs)
+        {
+            saveToolStripMenuItem.Enabled = false;
+            dictSaver.RunWorkerAsync(bgArgs);
         }
 
         /// <summary>
@@ -427,6 +445,12 @@ namespace WordSolver.Gui
         /// <param name="e"></param>
         private void dictSaver_DoWork(object sender, DoWorkEventArgs e)
         {
+            bool? arg = e.Argument as bool?;
+            if (arg != null && arg.HasValue && arg.Value)
+            {
+                e.Result = true;
+            }
+
             String path = getDictionaryPath();
             using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
@@ -444,10 +468,16 @@ namespace WordSolver.Gui
         /// <param name="e"></param>
         private void dictSaver_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // TODO: Possibly add some handler here
+            saveToolStripMenuItem.Enabled = true;
+
+            bool? result = e.Result as bool?;
+            if (result != null && result.HasValue && result.Value)
+            {
+                MessageBox.Show("Dictionary saved", "Dictionary saved", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
         }
 
-        #endregion 
+        #endregion
 
         private void wordInput_TextChanged(object sender, EventArgs e)
         {

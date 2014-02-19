@@ -247,5 +247,26 @@ namespace WordSolver.Dictionary
                 }
             }
         }
+
+        public bool RemoveWord(CharEnumerator wordEnum)
+        {
+            if (!wordEnum.MoveNext())
+            {
+                bool wasWord = IsWord;
+                IsWord = false;
+                return wasWord;
+            }
+
+            char c = wordEnum.Current;
+
+            foreach (DictNode n in Children)
+            {
+                if (n.Letter == c)
+                {
+                    return n.RemoveWord(wordEnum);
+                }
+            }
+            return false;
+        }
     }
 }
