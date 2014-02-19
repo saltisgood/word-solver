@@ -33,6 +33,7 @@ namespace WordSolver.Gui
 
             letterComBox.SelectedIndex = (int)Button.SelectedLetter;
             requiredCheBox.Checked = Button.IsRequired;
+            restrictionCombo.SelectedIndex = (int)Button.Restriction;
         }
 
         /// <summary>
@@ -43,8 +44,9 @@ namespace WordSolver.Gui
         private void button1_Click(object sender, EventArgs e)
         {
             Button.SelectedLetter = (LetterUtil.Letter)letterComBox.SelectedIndex;
-            Button.Text = LetterUtil.ConvertToString(Button.SelectedLetter);
             Button.IsRequired = requiredCheBox.Checked;
+            Button.Restriction = (PositionRestriction)restrictionCombo.SelectedIndex;
+            Button.Text = LetterButton.GetText(Button);
 
             if (Button.IsRequired)
             {

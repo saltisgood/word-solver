@@ -18,7 +18,8 @@ namespace WordSolver.Util
         {
             A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7, I = 8, J = 9, K = 10,
             L = 11, M = 12, N = 13, O = 14, P = 15, Q = 16, R = 17, S = 18, T = 19, U = 20,
-            V = 21, W = 22, X = 23, Y = 24, Z = 25, UNKNOWN = 26
+            V = 21, W = 22, X = 23, Y = 24, Z = 25, UNKNOWN = -1, AR = 26, CH = 27, ER = 28,
+            EST = 29, RE = 30, TO = 31, VE = 32
         }
 
         /// <summary>
@@ -148,8 +149,246 @@ namespace WordSolver.Util
                     return "Y";
                 case Letter.Z:
                     return "Z";
+                case Letter.ER:
+                    return "ER";
+                case Letter.AR:
+                    return "AR";
+                case Letter.CH:
+                    return "CH";
+                case Letter.RE:
+                    return "RE";
+                case Letter.EST:
+                    return "EST";
+                case Letter.TO:
+                    return "TO";
+                case Letter.VE:
+                    return "VE";
                 case Letter.UNKNOWN: default:
                     return "UNKNOWN";
+            }
+        }
+
+        public static int GetLetterScore(Letter letter)
+        {
+            switch (letter)
+            {
+                case Letter.A:
+                    return 2;
+                case Letter.B:
+                    return 5;
+                case Letter.C:
+                    return 3;
+                case Letter.D:
+                    return 3;
+                case Letter.E:
+                    return 1;
+                case Letter.F:
+                    return 5;
+                case Letter.G:
+                    return 4;
+                case Letter.H:
+                    return 4;
+                case Letter.I:
+                    return 2;
+                case Letter.J:
+                    throw new NotImplementedException();
+                case Letter.K:
+                    return 6;
+                case Letter.L:
+                    return 3;
+                case Letter.M:
+                    return 4;
+                case Letter.N:
+                    return 2;
+                case Letter.O:
+                    return 2;
+                case Letter.P:
+                    return 4;
+                case Letter.Q:
+                    throw new NotImplementedException();
+                case Letter.R:
+                    return 2;
+                case Letter.S:
+                    return 2;
+                case Letter.T:
+                    return 2;
+                case Letter.U:
+                    return 4;
+                case Letter.V:
+                    return 6;
+                case Letter.W:
+                    return 6;
+                case Letter.X:
+                    return 9;
+                case Letter.Y:
+                    return 5;
+                case Letter.AR:
+                    return 7;
+                case Letter.CH:
+                    return 9;
+                case Letter.ER:
+                    return 6;
+                case Letter.RE:
+                    return 12;
+                case Letter.EST:
+                    return 12;
+                case Letter.TO:
+                    return 6;
+                case Letter.VE:
+                    return 6;
+                case Letter.Z:
+                    throw new NotImplementedException();
+                case Letter.UNKNOWN:
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        public static int GetLetterScore(char c)
+        {
+            return GetLetterScore(GetLetter(c));
+        }
+
+        public static int GetWordScore(String word)
+        {
+            int score = 0, count = 0;
+
+            CharEnumerator enumer = word.GetEnumerator();
+            while (enumer.MoveNext())
+            {
+                score += GetLetterScore(enumer.Current);
+                count++;
+            }
+
+            if (count >= 8)
+            {
+                return (int)(score * 2.5);
+            }
+            else if (count >= 6)
+            {
+                return score * 2;
+            }
+            else if (count == 5)
+            {
+                return (int)(score * 1.5);
+            }
+            return score;
+        }
+
+        /// <summary>
+        /// Split up a digram into each of its component letters
+        /// </summary>
+        /// <param name="digram">The original digram</param>
+        /// <param name="pos">The position of the letter to return from the digram</param>
+        /// <returns>One of the 2 letters from the digram</returns>
+        public static Letter SplitDigram(Letter digram, int pos)
+        {
+            if (GetLetterLength(digram) < 2)
+            {
+                throw new ArgumentException("Letter is not a digram!");
+            }
+            switch (digram)
+            {
+                case Letter.ER:
+                    if (pos == 0)
+                    {
+                        return Letter.E;
+                    }
+                    else
+                    {
+                        return Letter.R;
+                    }
+                case Letter.AR:
+                    if (pos == 0)
+                    {
+                        return Letter.A;
+                    }
+                    else
+                    {
+                        return Letter.R;
+                    }
+                case Letter.CH:
+                    if (pos == 0)
+                    {
+                        return Letter.C;
+                    }
+                    else
+                    {
+                        return Letter.H;
+                    }
+                case Letter.RE:
+                    if (pos == 0)
+                    {
+                        return Letter.R;
+                    }
+                    else
+                    {
+                        return Letter.E;
+                    }
+                case Letter.VE:
+                    if (pos == 0)
+                    {
+                        return Letter.V;
+                    }
+                    else
+                    {
+                        return Letter.E;
+                    }
+                case Letter.TO:
+                    if (pos == 0)
+                    {
+                        return Letter.T;
+                    }
+                    else
+                    {
+                        return Letter.O;
+                    }
+                case Letter.EST:
+                    if (pos == 0)
+                    {
+                        return Letter.E;
+                    }
+                    else if (pos == 1)
+                    {
+                        return Letter.S;
+                    }
+                    else
+                    {
+                        return Letter.T;
+                    }
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Return all the letters from a digram
+        /// </summary>
+        /// <param name="digram">The digram to split up</param>
+        /// <returns>A 2/3-index array of letters</returns>
+        public static Letter[] SplitDigram(Letter digram)
+        {
+            Letter[] letters = new Letter[2];
+            letters[0] = SplitDigram(digram, 0);
+            letters[1] = SplitDigram(digram, 1);
+            return letters;
+        }
+
+        public static int GetLetterLength(Letter letter)
+        {
+            switch (letter)
+            {
+                case Letter.ER:
+                case Letter.AR:
+                case Letter.CH:
+                case Letter.RE:
+                case Letter.TO:
+                case Letter.VE:
+                    return 2;
+                case Letter.EST:
+                    return 3;
+                default:
+                    return 1;
             }
         }
     }

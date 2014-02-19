@@ -20,7 +20,7 @@ namespace WordSolver.Gui
             List<String>.Enumerator results = Solutions.Enumerate();
             while (results.MoveNext())
             {
-                listBox1.Items.Add(results.Current);
+                listBox1.Items.Add(results.Current + " - " + LetterUtil.GetWordScore(results.Current));
             }
         }
     }

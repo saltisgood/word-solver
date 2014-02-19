@@ -13,7 +13,8 @@ namespace WordSolver.Util
     {
         int IComparer<String>.Compare(String a, String b)
         {
-            return b.Length - a.Length;
+            return LetterUtil.GetWordScore(b) - LetterUtil.GetWordScore(a);
+            //return b.Length - a.Length;
         }
     }
 }

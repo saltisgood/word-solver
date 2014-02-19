@@ -103,10 +103,11 @@ namespace WordSolver.Dictionary
         {
             foreach (DictNode n in Children)
             {
-                if (n.LetterEnum == node.Letter)
+                if (n.LetterEnum == node.GetLetter())
                 {
                     n.FindAllWords(node);
-                    node.IsUsed = false;
+                    node.Release();
+                    break;
                 }
             }
         }
@@ -154,6 +155,11 @@ namespace WordSolver.Dictionary
                     n.WordSearch(wordEnum, solns);
                 }
             }
+        }
+
+        public void RemoveWord(String word)
+        {
+
         }
     }
 }

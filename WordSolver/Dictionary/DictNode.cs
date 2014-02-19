@@ -140,22 +140,22 @@ namespace WordSolver.Dictionary
         /// <param name="node">The node in the LetterGrid that should align with this node in the dictionary tree</param>
         public void FindAllWords(LetterGrid.Node node)
         {
-            if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.ParentGrid.CheckForMandatoryNodes(node))
+            node.Use();
+            if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
             {
                 Solutions.AddWord(this.ToString());
             }
-
-            node.IsUsed = true;
-            foreach (LetterGrid.Node n in node.AdjacentNodes)
+            
+            foreach (LetterGrid.Node n in node.GetAdjacentNodes())
             {
-                if (!n.IsUsed)
+                if (!n.IsUsed())
                 {
                     foreach (DictNode n2 in Children)
                     {
-                        if (n.Letter == n2.LetterEnum)
+                        if (n.GetLetter() == n2.LetterEnum)
                         {
                             n2.FindAllWords(n);
-                            n.IsUsed = false;
+                            n.Release();
                             break;
                         }
                     }

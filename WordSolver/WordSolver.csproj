@@ -71,6 +71,7 @@
     <Compile Include="Gui\Results.Designer.cs">
       <DependentUpon>Results.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util\PositionRestriction.cs" />
     <Compile Include="Util\Solutions.cs" />
     <Compile Include="Util\SolutionSorter.cs" />
     <Compile Include="Dictionary\TreeTraverse.cs" />

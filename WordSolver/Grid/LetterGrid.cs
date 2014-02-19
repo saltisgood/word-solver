@@ -125,6 +125,7 @@ namespace WordSolver.Grid
         /// Find all the words in the given dictionary tree
         /// </summary>
         /// <param name="tree">The tree to search</param>
+        /// <param name="options">The options that the game is played with</param>
         public void FindWords(DictTree tree, GameOptions options)
         {
             NodeList = new Node[Y][];
@@ -133,7 +134,7 @@ namespace WordSolver.Grid
                 NodeList[y] = new Node[X];
                 for (int x = 0; x < X; x++)
                 {
-                    NodeList[y][x] = new Node(this, x, y, Buttons[y][x].SelectedLetter, Buttons[y][x].IsRequired);
+                    NodeList[y][x] = new Node(this, Buttons[y][x]);
                 }
             }
 
@@ -154,44 +155,72 @@ namespace WordSolver.Grid
                 {
                     for (int x = 0; x < X; x++)
                     {
+                        if (NodeList[y][x].Restriction == PositionRestriction.END)
+                        {
+                            continue;
+                        }
                         if (y != 0)
                         {
-                            NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x]);
+                            if (NodeList[y - 1][x].Restriction != PositionRestriction.START)
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x]);
+                            }
 
                             if (x != 0)
                             {
-                                NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x - 1]);
+                                if (NodeList[y - 1][x - 1].Restriction != PositionRestriction.START)
+                                {
+                                    NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x - 1]);
+                                }
                             }
 
                             if (x < (X - 1))
                             {
-                                NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x + 1]);
+                                if (NodeList[y - 1][x + 1].Restriction != PositionRestriction.START)
+                                {
+                                    NodeList[y][x].AddAdjacentNode(NodeList[y - 1][x + 1]);
+                                }
                             }
                         }
 
                         if (y < (Y - 1))
                         {
-                            NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x]);
+                            if (NodeList[y + 1][x].Restriction != PositionRestriction.START)
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x]);
+                            }
 
                             if (x != 0)
                             {
-                                NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x - 1]);
+                                if (NodeList[y + 1][x - 1].Restriction != PositionRestriction.START)
+                                {
+                                    NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x - 1]);
+                                }
                             }
 
                             if (x < (X - 1))
                             {
-                                NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x + 1]);
+                                if (NodeList[y + 1][x + 1].Restriction != PositionRestriction.START)
+                                {
+                                    NodeList[y][x].AddAdjacentNode(NodeList[y + 1][x + 1]);
+                                }
                             }
                         }
 
                         if (x != 0)
                         {
-                            NodeList[y][x].AddAdjacentNode(NodeList[y][x - 1]);
+                            if (NodeList[y][x - 1].Restriction != PositionRestriction.START)
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y][x - 1]);
+                            }
                         }
 
                         if (x < (X - 1))
                         {
-                            NodeList[y][x].AddAdjacentNode(NodeList[y][x + 1]);
+                            if (NodeList[y][x + 1].Restriction != PositionRestriction.START)
+                            {
+                                NodeList[y][x].AddAdjacentNode(NodeList[y][x + 1]);
+                            }
                         }
                     }
                 }
@@ -199,15 +228,21 @@ namespace WordSolver.Grid
             }
             else
             {
+                #region Lots o' Loops
                 for (int y = 0; y < Y; y++)
                 {
                     for (int x = 0; x < X; x++)
                     {
+                        if (NodeList[y][x].Restriction == PositionRestriction.END)
+                        {
+                            continue;
+                        }
+
                         for (int y1 = 0; y1 < Y; y1++)
                         {
                             for (int x1 = 0; x1 < X; x1++)
                             {
-                                if (x == x1 && y == y1)
+                                if ((x == x1 && y == y1) || NodeList[y1][x1].Restriction == PositionRestriction.START)
                                 {
                                     continue;
                                 }
@@ -216,6 +251,7 @@ namespace WordSolver.Grid
                         }
                     }
                 }
+                #endregion
             }
         }
 
@@ -234,13 +270,13 @@ namespace WordSolver.Grid
             }
         }
 
-        public bool CheckForMandatoryNodes(Node finalNode)
+        public bool CheckForMandatoryNodes()
         {
             foreach (Node[] nodes in NodeList)
             {
                 foreach (Node n in nodes)
                 {
-                    if (n.IsMandatory && !n.IsUsed && n != finalNode)
+                    if (n.IsMandatory && !n.IsUsed())
                     {
                         return false;
                     }
@@ -258,26 +294,22 @@ namespace WordSolver.Grid
             /// A boolean that is used to determine whether a node has been used or is still available for use.
             /// Should be used when deciding whether moving to this adjacent node is a valid move or not.
             /// </summary>
-            public bool IsUsed = false;
+            //public bool IsUsed = false;
+            
+            public bool IsMandatory { get; private set; }
+            public LetterGrid ParentGrid { get; private set; }
+            public PositionRestriction Restriction { get; private set; }
 
-            /// <summary>
-            /// The X-coordinate of this node in the grid
-            /// </summary>
-            public int X { get; private set; }
-            /// <summary>
-            /// The Y-coordinate of this node in the grid
-            /// </summary>
-            public int Y { get; private set; }
             /// <summary>
             /// The Letter enum representatino of this node
             /// </summary>
-            public LetterUtil.Letter Letter { get; private set; }
+            private LetterUtil.Letter Letter;
             /// <summary>
             /// A list of the other nodes in the grid that are directly adjacent to this one
             /// </summary>
-            public List<Node> AdjacentNodes { get; private set; }
-            public bool IsMandatory { get; private set; }
-            public LetterGrid ParentGrid { get; private set; }
+            private List<Node> AdjacentNodes;
+            private int UseCount = 0;
+            private int LetterLength;
 
             /// <summary>
             /// Constructor.
@@ -285,17 +317,17 @@ namespace WordSolver.Grid
             /// <param name="x">The X-coordinate of this node in the grid</param>
             /// <param name="y">The Y-coordinate of this node in the grid</param>
             /// <param name="letter">The Letter enum to be used for this node</param>
-            public Node(LetterGrid parentGrid, int x, int y, LetterUtil.Letter letter, bool isMandatory)
+            public Node(LetterGrid parentGrid, LetterUtil.Letter letter, bool isMandatory, PositionRestriction restriction)
             {
                 ParentGrid = parentGrid;
-                X = x;
-                Y = y;
                 Letter = letter;
                 AdjacentNodes = new List<Node>();
                 IsMandatory = isMandatory;
+                Restriction = restriction;
+                LetterLength = LetterUtil.GetLetterLength(Letter);
             }
 
-            public Node(LetterGrid parentGrid, int x, int y, LetterButton button) : this(parentGrid, x, y, button.SelectedLetter, button.IsRequired)
+            public Node(LetterGrid parentGrid, LetterButton button) : this(parentGrid, button.SelectedLetter, button.IsRequired, button.Restriction)
             {
             }
 
@@ -315,6 +347,57 @@ namespace WordSolver.Grid
             public override String ToString()
             {
                 return LetterUtil.ConvertToString(Letter);
+            }
+
+            private bool IsDigram()
+            {
+                return LetterLength > 1;
+            }
+
+            public LetterUtil.Letter GetLetter()
+            {
+                if (IsDigram())
+                {
+                    return LetterUtil.SplitDigram(Letter, UseCount);
+                }
+                else
+                {
+                    return Letter;
+                }
+            }
+
+            public bool IsUsed()
+            {
+                return UseCount >= LetterLength;
+            }
+
+            public List<Node> GetAdjacentNodes()
+            {
+                if (IsDigram() && UseCount < LetterLength)
+                {
+                    List<Node> fakeList = new List<Node>();
+                    fakeList.Add(this);
+                    return fakeList;
+                }
+                else
+                {
+                    return AdjacentNodes;
+                }
+            }
+
+            public bool UsedUp()
+            {
+                return UseCount >= LetterLength;
+            }
+
+            public void Use()
+            {
+                UseCount++;
+            }
+
+            public void Release()
+            {
+                UseCount--;
             }
         }
     }

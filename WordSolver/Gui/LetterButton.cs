@@ -22,6 +22,10 @@ namespace WordSolver.Gui
         /// Whether this letter is required to be used in a word
         /// </summary>
         public bool IsRequired = false;
+        /// <summary>
+        /// The restriction of the position of the letter in the word
+        /// </summary>
+        public PositionRestriction Restriction = PositionRestriction.NONE;
 
         /// <summary>
         /// Standard constructor. Initialises all the event handlers and appearance of the button
@@ -31,7 +35,7 @@ namespace WordSolver.Gui
         public LetterButton(int x, int y) : base()
         {
             this.Size = new System.Drawing.Size(100, 100);
-            this.Font = new Font("Calibri", 40, FontStyle.Bold);
+            this.Font = new Font("Calibri", 30, FontStyle.Bold);
             this.Text = "A";
 
             this.Location = new Point(105 * x, 105 * y);
@@ -201,6 +205,23 @@ namespace WordSolver.Gui
                         break;
                 }
             }
+        }
+
+        public static String GetText(LetterButton button)
+        {
+            String text = LetterUtil.ConvertToString(button.SelectedLetter);
+
+            switch (button.Restriction)
+            {
+                case PositionRestriction.START:
+                    text += "-";
+                    break;
+                case PositionRestriction.END:
+                    text = "-" + text;
+                    break;
+            }
+
+            return text;
         }
     }
 }
