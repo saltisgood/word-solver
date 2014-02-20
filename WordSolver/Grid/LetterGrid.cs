@@ -57,28 +57,27 @@ namespace WordSolver.Grid
             }
             X = x;
             Y = y;
+
+            Options = new GameOptions(false);
+
             Buttons = new LetterButton[GRID_MAX_Y][];
             for (int i = 0; i < GRID_MAX_Y; i++)
             {
                 Buttons[i] = new LetterButton[GRID_MAX_X];
                 for (int j = 0; j < GRID_MAX_X; j++)
                 {
-                    Buttons[i][j] = new LetterButton(j, i, this);
+                    Buttons[i][j] = new LetterButton(j, i).Sync(this);
                 }
             }
 
-            Options = new GameOptions(false);
+            
         }
 
         /// <summary>
         /// Constructor used for an empty anagram initialisation
         /// </summary>
-        //public LetterGrid(MainWindow window) : this(GRID_MAX_X, GRID_MAX_Y, window)
         public LetterGrid(MainWindow window) : this(string.Empty, window)
         {
-            /* Options = new GameOptions(0);
-            X = 0;
-            Y = 0; */
         }
 
         /// <summary>
@@ -99,6 +98,14 @@ namespace WordSolver.Grid
             if (!Options.IsMaxAnagramLength)
             {
                 SetIsAddLetter(count, true);
+            }
+
+            foreach (LetterButton[] buttons in Buttons)
+            {
+                foreach (LetterButton button in buttons)
+                {
+                    button.Sync(this);
+                }
             }
         }
 

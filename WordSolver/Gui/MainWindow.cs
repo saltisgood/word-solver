@@ -562,14 +562,14 @@ namespace WordSolver.Gui
 
                     if (AnagramGrid == null)
                     {
-                        String result = Interaction.InputBox("Enter the letters to be solved, without spaces", "Enter the anagram", string.Empty);
+                        String result = Interaction.InputBox("Enter the letters to be solved", "Enter the anagram", string.Empty);
                         if (String.IsNullOrWhiteSpace(result))
                         {
                             AnagramGrid = new LetterGrid(this);
                         }
                         else
                         {
-                            result = result.Trim().ToLowerInvariant();
+                            result = result.Trim().ToLowerInvariant().Replace(" ", "");
                             AnagramGrid = new LetterGrid(result, this);
                         }
                     }

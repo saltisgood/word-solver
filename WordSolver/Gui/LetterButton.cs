@@ -84,9 +84,8 @@ namespace WordSolver.Gui
         /// </summary>
         /// <param name="x">The x-coordinate of the button in the grid</param>
         /// <param name="y">The y-coordinate of the button in the grid</param>
-        public LetterButton(int x, int y, LetterGrid grid) : base()
+        public LetterButton(int x, int y) : base()
         {
-            ParentGrid = grid;
             _isAddLetter = false;
 
             this.Size = new System.Drawing.Size(100, 100);
@@ -100,7 +99,7 @@ namespace WordSolver.Gui
             this.MouseLeave += mouseLeave;
             this.KeyDown += keyDown;
             this.UseVisualStyleBackColor = false;
-            this._contextMenu = this.ContextMenuStrip = new LetterButtonContextMenu(this);
+            this._contextMenu = new LetterButtonContextMenu(this);
         }
 
         /// <summary>
@@ -125,6 +124,16 @@ namespace WordSolver.Gui
         public void Remove()
         {
             ParentGrid.RemoveLetter(this);
+        }
+
+        public LetterButton Sync(LetterGrid parentGrid)
+        {
+            ParentGrid = parentGrid;
+            if (ParentGrid.Options.IsAnagram && !_isAddLetter)
+            {
+                this.ContextMenuStrip = _contextMenu;
+            }
+            return this;
         }
 
         /// <summary>

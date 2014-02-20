@@ -39,6 +39,7 @@ namespace WordSolver.Gui
 
             if (Tree.RemoveWord(selectedItem.ToString()))
             {
+                listBox1.Items.Remove(selectedItem);
                 MessageBox.Show(selectedItem.ToString() + " removed from dictionary. Remember to save dictionary when finished.", "Word removed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             else
