@@ -32,7 +32,7 @@ namespace WordSolver.Grid
             }
             set
             {
-                _anagramLength = (value <= LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y) ? value : LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y;
+                _anagramLength = (value < 0 ) ? 0 : ((value <= LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y) ? value : LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y);
             }
         }
 

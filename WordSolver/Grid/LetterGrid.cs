@@ -182,6 +182,7 @@ namespace WordSolver.Grid
                         controls[i++] = Buttons[y][x];
                         if (i == maxSize)
                         {
+                            Y = y + 1;
                             return controls;
                         }
                     }
@@ -358,7 +359,7 @@ namespace WordSolver.Grid
         {
             if (!Options.IsAnagram)
             {
-                throw new InvalidOperationException("Letters can only be added in anagram mode");
+                throw new InvalidOperationException("Letters can only be added in anagram mode!");
             }
 
             Options.AnagramLength++;
@@ -368,6 +369,97 @@ namespace WordSolver.Grid
             }
 
             ParentWindow.RefreshPanel();
+        }
+
+        public void RemoveLetter(LetterButton button)
+        {
+            if (!Options.IsAnagram)
+            {
+                throw new InvalidOperationException("Letters can only be removed in anagram mode!");
+            }
+
+            if (Options.AnagramLength-- == 0)
+            {
+                return;
+            }
+
+            bool found = false;
+            int x = 0, y = 0;
+            for (; y < Y; y++)
+            {
+                for (x = 0; x < X; x++)
+                {
+                    if (Buttons[y][x] == button)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                throw new ArgumentException("Button was not found in grid!");
+            }
+
+            for (; x < X; x++)
+            {
+                if (x == X - 1)
+                {
+                    Buttons[y][x].SelectedLetter = Buttons[y + 1][0].SelectedLetter;
+                    Buttons[y][x].IsRequired = Buttons[y + 1][0].IsRequired;
+                    Buttons[y][x].Restriction = Buttons[y + 1][0].Restriction;
+                    if (Buttons[y][x].IsAddLetter = Buttons[y + 1][0].IsAddLetter)
+                    {
+                        ParentWindow.RefreshPanel();
+                        return;
+                    }
+                }
+                else
+                {
+                    Buttons[y][x].SelectedLetter = Buttons[y][x + 1].SelectedLetter;
+                    Buttons[y][x].IsRequired = Buttons[y][x + 1].IsRequired;
+                    Buttons[y][x].Restriction = Buttons[y][x + 1].Restriction;
+                    if (Buttons[y][x].IsAddLetter = Buttons[y][x + 1].IsAddLetter)
+                    {
+                        ParentWindow.RefreshPanel();
+                        return;
+                    }
+                }
+            }
+
+            for (y++; y < Y; y++)
+            {
+                for (x = 0; x < X; x++)
+                {
+                    if (x == X - 1)
+                    {
+                        Buttons[y][x].SelectedLetter = Buttons[y + 1][0].SelectedLetter;
+                        Buttons[y][x].IsRequired = Buttons[y + 1][0].IsRequired;
+                        Buttons[y][x].Restriction = Buttons[y + 1][0].Restriction;
+                        if (Buttons[y][x].IsAddLetter = Buttons[y + 1][0].IsAddLetter)
+                        {
+                            ParentWindow.RefreshPanel();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Buttons[y][x].SelectedLetter = Buttons[y][x + 1].SelectedLetter;
+                        Buttons[y][x].IsRequired = Buttons[y][x + 1].IsRequired;
+                        Buttons[y][x].Restriction = Buttons[y][x + 1].Restriction;
+                        if (Buttons[y][x].IsAddLetter = Buttons[y][x + 1].IsAddLetter)
+                        {
+                            ParentWindow.RefreshPanel();
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

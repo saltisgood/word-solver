@@ -18,7 +18,22 @@ namespace WordSolver.Gui
         /// <summary>
         /// The selected letter to display on the button
         /// </summary>
-        public LetterUtil.Letter SelectedLetter = LetterUtil.Letter.A;
+        public LetterUtil.Letter SelectedLetter
+        {
+            get
+            {
+                return _selectedLetter;
+            }
+            set
+            {
+                _selectedLetter = value;
+                this.Text = GetText(this);
+            }
+        }
+
+
+        private LetterUtil.Letter _selectedLetter = LetterUtil.Letter.A;
+
         /// <summary>
         /// Whether this letter is required to be used in a word
         /// </summary>
@@ -37,24 +52,32 @@ namespace WordSolver.Gui
 
             set
             {
+                if (_isAddLetter == value)
+                {
+                    return;
+                }
                 _isAddLetter = value;
                 if (value)
                 {
                     this.Text = "+";
                     this.Click -= SelectFormOnClick;
                     this.Click += AddLetterOnClick;
+                    this.ContextMenuStrip = null;
                 }
                 else
                 {
                     this.Text = GetText(this);
                     this.Click -= AddLetterOnClick;
                     this.Click += SelectFormOnClick;
+                    this.ContextMenuStrip = this._contextMenu;
                 }
             }
         }
         private bool _isAddLetter;
 
         private LetterGrid ParentGrid;
+
+        private ContextMenuStrip _contextMenu;
 
         /// <summary>
         /// Standard constructor. Initialises all the event handlers and appearance of the button
@@ -77,6 +100,7 @@ namespace WordSolver.Gui
             this.MouseLeave += mouseLeave;
             this.KeyDown += keyDown;
             this.UseVisualStyleBackColor = false;
+            this._contextMenu = this.ContextMenuStrip = new LetterButtonContextMenu(this);
         }
 
         /// <summary>
@@ -93,6 +117,14 @@ namespace WordSolver.Gui
         {
             this.IsAddLetter = false;
             ParentGrid.AddLetter();
+        }
+
+        /// <summary>
+        /// Remove this letter from the grid
+        /// </summary>
+        public void Remove()
+        {
+            ParentGrid.RemoveLetter(this);
         }
 
         /// <summary>
