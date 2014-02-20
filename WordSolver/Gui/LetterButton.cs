@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using WordSolver.Util;
+using WordSolver.Grid;
 
 namespace WordSolver.Gui
 {
@@ -27,23 +28,54 @@ namespace WordSolver.Gui
         /// </summary>
         public PositionRestriction Restriction = PositionRestriction.NONE;
 
+        public bool IsAddLetter
+        { 
+            get 
+            { 
+                return _isAddLetter; 
+            }
+
+            set
+            {
+                _isAddLetter = value;
+                if (value)
+                {
+                    this.Text = "+";
+                    this.Click -= SelectFormOnClick;
+                    this.Click += AddLetterOnClick;
+                }
+                else
+                {
+                    this.Text = GetText(this);
+                    this.Click -= AddLetterOnClick;
+                    this.Click += SelectFormOnClick;
+                }
+            }
+        }
+        private bool _isAddLetter;
+
+        private LetterGrid ParentGrid;
+
         /// <summary>
         /// Standard constructor. Initialises all the event handlers and appearance of the button
         /// </summary>
         /// <param name="x">The x-coordinate of the button in the grid</param>
         /// <param name="y">The y-coordinate of the button in the grid</param>
-        public LetterButton(int x, int y) : base()
+        public LetterButton(int x, int y, LetterGrid grid) : base()
         {
+            ParentGrid = grid;
+            _isAddLetter = false;
+
             this.Size = new System.Drawing.Size(100, 100);
             this.Font = new Font("Calibri", 30, FontStyle.Bold);
             this.Text = "A";
 
             this.Location = new Point(105 * x, 105 * y);
 
-            this.Click += new EventHandler(onClick);
-            this.MouseEnter += new EventHandler(mouseEnter);
-            this.MouseLeave += new EventHandler(mouseLeave);
-            this.KeyDown += new KeyEventHandler(keyDown);
+            this.Click += SelectFormOnClick;
+            this.MouseEnter += mouseEnter;
+            this.MouseLeave += mouseLeave;
+            this.KeyDown += keyDown;
             this.UseVisualStyleBackColor = false;
         }
 
@@ -52,9 +84,15 @@ namespace WordSolver.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void onClick(object sender, EventArgs e)
+        private void SelectFormOnClick(object sender, EventArgs e)
         {
             new LetterSelectForm(this).ShowDialog();
+        }
+
+        private void AddLetterOnClick(object sender, EventArgs e)
+        {
+            this.IsAddLetter = false;
+            ParentGrid.AddLetter();
         }
 
         /// <summary>
@@ -209,6 +247,11 @@ namespace WordSolver.Gui
 
         public static String GetText(LetterButton button)
         {
+            if (button.IsAddLetter)
+            {
+                return "+";
+            }
+
             String text = LetterUtil.ConvertToString(button.SelectedLetter);
 
             switch (button.Restriction)

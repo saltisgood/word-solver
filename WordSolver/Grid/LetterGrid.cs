@@ -33,20 +33,24 @@ namespace WordSolver.Grid
         /// The current size of the grid in the y-direction
         /// </summary>
         public int Y { get; private set; }
+        public GameOptions Options { get; private set; }
 
         /// <summary>
         /// The 2-D array of buttons that are used in this grid
         /// </summary>
         private LetterButton[][] Buttons;
         private Node[][] NodeList;
+        private MainWindow ParentWindow;
 
         /// <summary>
         /// Constructor. Nothing much to say.
         /// </summary>
         /// <param name="x">The initial size of the grid in the x-direction, must be less than GRID_MAX_X</param>
         /// <param name="y">The initial size of the grid in the y-direction, must be less than GRID_MAX_Y</param>
-        public LetterGrid(int x, int y)
+        public LetterGrid(int x, int y, MainWindow window)
         {
+            ParentWindow = window;
+
             if (x > GRID_MAX_X || y > GRID_MAX_Y)
             {
                 throw new ArgumentOutOfRangeException("X or Y values greater than allowed size");
@@ -59,8 +63,42 @@ namespace WordSolver.Grid
                 Buttons[i] = new LetterButton[GRID_MAX_X];
                 for (int j = 0; j < GRID_MAX_X; j++)
                 {
-                    Buttons[i][j] = new LetterButton(j, i);
+                    Buttons[i][j] = new LetterButton(j, i, this);
                 }
+            }
+
+            Options = new GameOptions(false);
+        }
+
+        /// <summary>
+        /// Constructor used for an empty anagram initialisation
+        /// </summary>
+        //public LetterGrid(MainWindow window) : this(GRID_MAX_X, GRID_MAX_Y, window)
+        public LetterGrid(MainWindow window) : this(string.Empty, window)
+        {
+            /* Options = new GameOptions(0);
+            X = 0;
+            Y = 0; */
+        }
+
+        /// <summary>
+        /// Constructor used when initialising an anagram with a given word
+        /// </summary>
+        /// <param name="word"></param>
+        public LetterGrid(String word, MainWindow window) : this(GRID_MAX_X, word.Length / GRID_MAX_X + (((word.Length % GRID_MAX_X) == 0) ? 0 : 1), window)
+        {
+            Options = new GameOptions(word.Length);
+
+            CharEnumerator charEnum = word.GetEnumerator();
+            int count = 0;
+            while (charEnum.MoveNext())
+            {
+                SetButtonValue(count++, LetterUtil.GetLetter(charEnum.Current));
+            }
+
+            if (!Options.IsMaxAnagramLength)
+            {
+                SetIsAddLetter(count, true);
             }
         }
 
@@ -101,24 +139,55 @@ namespace WordSolver.Grid
             SetButtonValue(count % X, count / X, letter);
         }
 
+        private void SetIsAddLetter(int x, int y, bool isAdd)
+        {
+            Buttons[y][x].IsAddLetter = true;
+        }
+
+        private void SetIsAddLetter(int count, bool isAdd)
+        {
+            SetIsAddLetter(count % X, count / X, isAdd);
+        }
+
         /// <summary>
         /// Get the buttons so that they can be added using Control.AddRange(Control[])
         /// </summary>
         /// <returns>The array of buttons</returns>
         public Control[] GetControls()
         {
-            Control[] controls = new Control[X * Y];
-
-            int i = 0;
-            for (int x = 0; x < X; x++)
+            if (!Options.IsAnagram)
             {
-                for (int y = 0; y < Y; y++)
-                {
-                    controls[i++] = Buttons[y][x];
-                }
-            }
+                Control[] controls = new Control[X * Y];
 
-            return controls;
+                int i = 0;
+                for (int x = 0; x < X; x++)
+                {
+                    for (int y = 0; y < Y; y++)
+                    {
+                        controls[i++] = Buttons[y][x];
+                    }
+                }
+
+                return controls;
+            }
+            else
+            {
+                int maxSize = (Options.AnagramLength + 1 <= GRID_MAX_X * GRID_MAX_Y) ? Options.AnagramLength + 1 : GRID_MAX_X * GRID_MAX_Y;
+                Control[] controls = new Control[maxSize];
+                int i = 0;
+                for (int y = 0; y < GRID_MAX_Y; y++)
+                {
+                    for (int x = 0; x < GRID_MAX_X; x++)
+                    {
+                        controls[i++] = Buttons[y][x];
+                        if (i == maxSize)
+                        {
+                            return controls;
+                        }
+                    }
+                }
+                return controls;
+            }
         }
 
         /// <summary>
@@ -126,7 +195,7 @@ namespace WordSolver.Grid
         /// </summary>
         /// <param name="tree">The tree to search</param>
         /// <param name="options">The options that the game is played with</param>
-        public void FindWords(DictTree tree, GameOptions options)
+        public void FindWords(DictTree tree)
         {
             NodeList = new Node[Y][];
             for (int y = 0; y < Y; y++)
@@ -138,7 +207,7 @@ namespace WordSolver.Grid
                 }
             }
 
-            SetupAdjNodes(options.IsAnagram);
+            SetupAdjNodes(Options.ConnectingLetters);
             Solve(tree);
         }
 
@@ -146,9 +215,9 @@ namespace WordSolver.Grid
         /// Setup the adjacent node list in the 2-D node list. These are the nodes that are directly
         /// adjacent to each node, cached for speed.
         /// </summary>
-        private void SetupAdjNodes(bool isAnagram)
+        private void SetupAdjNodes(bool isConnected)
         {
-            if (!isAnagram)
+            if (isConnected)
             {
                 #region lots of space
                 for (int y = 0; y < Y; y++)
@@ -283,6 +352,22 @@ namespace WordSolver.Grid
                 }
             }
             return true;
+        }
+
+        public void AddLetter()
+        {
+            if (!Options.IsAnagram)
+            {
+                throw new InvalidOperationException("Letters can only be added in anagram mode");
+            }
+
+            Options.AnagramLength++;
+            if (!Options.IsMaxAnagramLength)
+            {
+                SetIsAddLetter(Options.AnagramLength, true);
+            }
+
+            ParentWindow.RefreshPanel();
         }
 
         /// <summary>

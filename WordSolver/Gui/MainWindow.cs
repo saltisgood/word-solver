@@ -39,9 +39,20 @@ namespace WordSolver.Gui
         /// </summary>
         private int GridIndex = 0;
         /// <summary>
-        /// The Grid object used in the form
+        /// The Grid object used in the form when the selected game type is Grid
         /// </summary>
-        private LetterGrid Grid;
+        private LetterGrid GameGrid;
+        /// <summary>
+        /// The Grid object used in the form when the selected game type is Anagram
+        /// </summary>
+        private LetterGrid AnagramGrid;
+        /// <summary>
+        /// The currently selected game type
+        /// 0 == Grid
+        /// 1 == Anagram
+        /// </summary>
+        private int GameTypeIndex = 0;
+
         /// <summary>
         /// Boolean used for determining whether to save the dictionary after it's finished loading
         /// </summary>
@@ -53,7 +64,7 @@ namespace WordSolver.Gui
         public MainWindow()
         {
             InitializeComponent();
-            Grid = new LetterGrid(4, 4);
+            GameGrid = new LetterGrid(4, 4, this);
             comboBox1.SelectedIndex = 1;
             gameTypeCombo.SelectedIndex = 0;
         }
@@ -179,13 +190,13 @@ namespace WordSolver.Gui
             switch (comboBox1.SelectedIndex)
             {
                 case 0:
-                    Grid.SetGridSize(3, 3);
-                    panel1.Controls.AddRange(Grid.GetControls());
+                    GameGrid.SetGridSize(3, 3);
+                    panel1.Controls.AddRange(GameGrid.GetControls());
                     GridIndex = 0;
                     break;
                 case 1:
-                    Grid.SetGridSize(4, 4);
-                    panel1.Controls.AddRange(Grid.GetControls());
+                    GameGrid.SetGridSize(4, 4);
+                    panel1.Controls.AddRange(GameGrid.GetControls());
                     GridIndex = 1;
                     break;
             }
@@ -199,7 +210,9 @@ namespace WordSolver.Gui
         private void findWordsClick(object sender, EventArgs e)
         {
             Solutions.Reset();
-            Grid.FindWords(Tree, new GameOptions(!connectingLetterCheck.Checked));
+            //Grid.SetGameOptions(new GameOptions(!connectingLetterCheck.Checked));
+            GameGrid.Options.ConnectingLetters = connectingLetterCheck.Checked;
+            GameGrid.FindWords(Tree);
             MessageBox.Show("Found: " + Solutions.Count + " words", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             Solutions.Finish();
             new Results(Tree).ShowDialog();
@@ -231,13 +244,11 @@ namespace WordSolver.Gui
 
                     for (int i = 0; i < 16; i++)
                     {
-                        Grid.SetButtonValue(i, LetterUtil.GetLetter(letters[i][0]));
+                        GameGrid.SetButtonValue(i, LetterUtil.GetLetter(letters[i][0]));
                     }
                     break;
             }
         }
-
-        
 
         #endregion
 
@@ -421,7 +432,6 @@ namespace WordSolver.Gui
                 preSaveDict(null);
             }
         }
-
         
         #endregion 
 
@@ -526,35 +536,81 @@ namespace WordSolver.Gui
 
         private void gameTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (gameTypeCombo.SelectedIndex == GameTypeIndex)
+            {
+                return;
+            }
+
             switch (gameTypeCombo.SelectedIndex)
             {
                 case 0:
                     comboBox1.Enabled = true;
                     connectingLetterCheck.Enabled = true;
+                    GameTypeIndex = 0;
+                    anagramTextBox.Enabled = false;
+                    anagramSetupButton.Enabled = false;
                     break;
                 case 1:
                     comboBox1.Enabled = false;
                     connectingLetterCheck.Enabled = false;
-                    String result = Interaction.InputBox("Enter the letters to be solved, without spaces", "Enter the anagram", string.Empty);
-                    if (String.IsNullOrWhiteSpace(result))
+                    GameTypeIndex = 1;
+                    anagramTextBox.Enabled = true;
+                    if (!String.IsNullOrWhiteSpace(anagramTextBox.Text))
                     {
-                        gameTypeCombo.SelectedIndex = 0;
-                        return;
-                    }
-                    result = result.Trim();
-                    int y = result.Length / LetterGrid.GRID_MAX_X + 1;
-                    int x = result.Length % LetterGrid.GRID_MAX_X;
-                    Grid.SetGridSize(x, y);
-
-                    for (int i = 0; i < result.Length; i++)
-                    {
-                        Grid.SetButtonValue(i, LetterUtil.GetLetter(result[i]));
+                        anagramSetupButton.Enabled = true;
                     }
 
-                    panel1.Controls.Clear();
-                    panel1.Controls.AddRange(Grid.GetControls());
-
+                    if (AnagramGrid == null)
+                    {
+                        String result = Interaction.InputBox("Enter the letters to be solved, without spaces", "Enter the anagram", string.Empty);
+                        if (String.IsNullOrWhiteSpace(result))
+                        {
+                            AnagramGrid = new LetterGrid(this);
+                        }
+                        else
+                        {
+                            result = result.Trim().ToLowerInvariant();
+                            AnagramGrid = new LetterGrid(result, this);
+                        }
+                    }
                     break;
+            }
+
+            RefreshPanel();
+        }
+
+        private void anagramSetupButton_Click(object sender, EventArgs e)
+        {
+            AnagramGrid = new LetterGrid(anagramTextBox.Text.Trim().ToLowerInvariant(), this);
+            panel1.Controls.Clear();
+            panel1.Controls.AddRange(AnagramGrid.GetControls());
+        }
+
+        private void anagramTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(anagramTextBox.Text))
+            {
+                anagramSetupButton.Enabled = false;
+            }
+            else
+            {
+                anagramSetupButton.Enabled = true;
+            }
+        }
+
+        public void RefreshPanel()
+        {
+            panel1.Controls.Clear();
+            switch (GameTypeIndex)
+            {
+                case 0: // Grid
+                    panel1.Controls.AddRange(GameGrid.GetControls());
+                    break;
+                case 1: // Anagram
+                    panel1.Controls.AddRange(AnagramGrid.GetControls());
+                    break;
+                default:
+                    throw new InvalidOperationException("GameTypeIndex has unexpected value");
             }
         }
     }
