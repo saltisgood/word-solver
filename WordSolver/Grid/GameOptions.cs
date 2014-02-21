@@ -42,7 +42,7 @@ namespace WordSolver.Grid
             {
                 if (IsAnagram)
                 {
-                    return true;
+                    return false;
                 }
                 return _connectingLetters;
             }

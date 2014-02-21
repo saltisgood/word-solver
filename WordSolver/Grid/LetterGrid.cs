@@ -203,20 +203,37 @@ namespace WordSolver.Grid
         /// </summary>
         /// <param name="tree">The tree to search</param>
         /// <param name="options">The options that the game is played with</param>
-        public void FindWords(DictTree tree)
+        public void FindWords()
         {
-            NodeList = new Node[Y][];
-            for (int y = 0; y < Y; y++)
+            if (!Options.IsAnagram)
             {
-                NodeList[y] = new Node[X];
-                for (int x = 0; x < X; x++)
+                NodeList = new Node[Y][];
+                for (int y = 0; y < Y; y++)
                 {
-                    NodeList[y][x] = new Node(this, Buttons[y][x]);
+                    NodeList[y] = new Node[X];
+                    for (int x = 0; x < X; x++)
+                    {
+                        NodeList[y][x] = new Node(this, Buttons[y][x]);
+                    }
+                }
+            }
+            else
+            {
+                NodeList = new Node[1][];
+                NodeList[0] = new Node[Options.AnagramLength];
+                for (int i = 0; i < Options.AnagramLength; i++)
+                {
+                    NodeList[0][i] = new Node(this, GetButton(i));
                 }
             }
 
             SetupAdjNodes(Options.ConnectingLetters);
-            Solve(tree);
+            Solve();
+        }
+
+        private LetterButton GetButton(int count)
+        {
+            return Buttons[count / X][count % X];
         }
 
         /// <summary>
@@ -225,6 +242,31 @@ namespace WordSolver.Grid
         /// </summary>
         private void SetupAdjNodes(bool isConnected)
         {
+            if (Options.IsAnagram)
+            {
+                for (int i = 0; i < Options.AnagramLength; i++)
+                {
+                    if (NodeList[0][i].Restriction == PositionRestriction.END)
+                    {
+                        continue;
+                    }
+
+                    for (int j = 0; j < Options.AnagramLength; j++)
+                    {
+                        if (i == j)
+                        {
+                            continue;
+                        }
+
+                        if (NodeList[0][j].Restriction != PositionRestriction.START)
+                        {
+                            NodeList[0][i].AddAdjacentNode(NodeList[0][j]);
+                        }
+                    }
+                }
+                return;
+            }
+
             if (isConnected)
             {
                 #region lots of space
@@ -336,13 +378,13 @@ namespace WordSolver.Grid
         /// Perform the actual word search of the 2-D node array with the dictionary tree
         /// </summary>
         /// <param name="tree">The dictionary tree to search</param>
-        private void Solve(DictTree tree)
+        private void Solve()
         {
-            for (int y = 0; y < Y; y++)
+            foreach (Node[] nodes in NodeList)
             {
-                for (int x = 0; x < X; x++)
+                foreach (Node n in nodes)
                 {
-                    tree.FindAllWords(NodeList[y][x]);
+                    ParentWindow.Tree.FindAllWords(n);
                 }
             }
         }
@@ -509,6 +551,11 @@ namespace WordSolver.Grid
                 IsMandatory = isMandatory;
                 Restriction = restriction;
                 LetterLength = LetterUtil.GetLetterLength(Letter);
+
+                if (ParentGrid.Options.IsAnagram)
+                {
+                    IsMandatory = true;
+                }
             }
 
             public Node(LetterGrid parentGrid, LetterButton button) : this(parentGrid, button.SelectedLetter, button.IsRequired, button.Restriction)

@@ -33,7 +33,7 @@ namespace WordSolver.Gui
         /// <summary>
         /// The dictionary tree used in the program
         /// </summary>
-        private DictTree Tree;
+        public DictTree Tree { get; private set; }
         /// <summary>
         /// The currently selected type of grid used in the form
         /// </summary>
@@ -210,9 +210,18 @@ namespace WordSolver.Gui
         private void findWordsClick(object sender, EventArgs e)
         {
             Solutions.Reset();
-            //Grid.SetGameOptions(new GameOptions(!connectingLetterCheck.Checked));
-            GameGrid.Options.ConnectingLetters = connectingLetterCheck.Checked;
-            GameGrid.FindWords(Tree);
+            switch (GameTypeIndex)
+            {
+                case 0: // Grid
+                    GameGrid.Options.ConnectingLetters = connectingLetterCheck.Checked;
+                    GameGrid.FindWords();
+                    break;
+                case 1: // Anagram
+                    AnagramGrid.FindWords();
+                    break;
+                default:
+                    throw new InvalidOperationException("Unexpected GameTypeIndex value!");
+            }
             MessageBox.Show("Found: " + Solutions.Count + " words", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             Solutions.Finish();
             new Results(Tree).ShowDialog();
