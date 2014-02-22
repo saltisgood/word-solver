@@ -17,7 +17,7 @@ namespace WordSolver.Dictionary
         public TreeTraverse Parent
         {
             get;
-            protected set;
+            private set;
         }
 
         /// <summary>
@@ -29,9 +29,29 @@ namespace WordSolver.Dictionary
             protected set;
         }
 
+        public DictTree Root
+        {
+            get
+            {
+                if (Parent != null)
+                {
+                    return Parent.Root;
+                }
+                else
+                {
+                    return this as DictTree;
+                }
+            }
+        }
+
         /// <summary>
         /// Base constructor. Should always be called from sub-classes to initialise the list of children
         /// </summary>
+        public TreeTraverse(TreeTraverse parent) : this()
+        {
+            Parent = parent;
+        }
+
         public TreeTraverse()
         {
             Children = new List<DictNode>();

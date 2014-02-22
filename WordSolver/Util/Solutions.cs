@@ -50,6 +50,16 @@ namespace WordSolver.Util
             return true;
         }
 
+        public static bool AddWord(PartialSoln soln)
+        {
+            String fullWord = String.Empty;
+            foreach (String word in soln.Words)
+            {
+                fullWord += word + " ";
+            }
+            return AddWord(fullWord);
+        }
+
         /// <summary>
         /// Sort the completed solution list
         /// </summary>
@@ -65,6 +75,46 @@ namespace WordSolver.Util
         public static List<String>.Enumerator Enumerate()
         {
             return SolutionList.GetEnumerator();
+        }
+
+        public class PartialSoln
+        {
+            public List<String> Words
+            {
+                get 
+                { 
+                    return _words; 
+                }
+            }
+            private List<String> _words;
+
+            public PartialSoln() 
+            {
+                _words = new List<string>();
+            }
+
+            public PartialSoln(PartialSoln prevSoln)
+            {
+                if (prevSoln == null)
+                {
+                    _words = new List<string>();
+                }
+                else
+                {
+                    _words = new List<string>(prevSoln._words);
+                }
+            }
+
+            public PartialSoln(PartialSoln prevSoln, String nextWord) : this(prevSoln)
+            {
+                _words.Add(nextWord);
+            }
+
+            public PartialSoln AddWord(String word)
+            {
+                _words.Add(word);
+                return this;
+            }
         }
     }
 }

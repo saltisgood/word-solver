@@ -52,7 +52,7 @@ namespace WordSolver.Dictionary
         /// </summary>
         /// <param name="subword">The enumeration of the word to populate the tree</param>
         /// <param name="depth">The depth of the node</param>
-        public DictNode(CharEnumerator subword, int depth) : base()
+        public DictNode(CharEnumerator subword, int depth, TreeTraverse parent) : base(parent)
         {
             Depth = depth;
             Letter = subword.Current;
@@ -67,17 +67,6 @@ namespace WordSolver.Dictionary
             {
                 IsWord = true;
             }
-        }
-
-        /// <summary>
-        /// Constructor used with a parent node
-        /// </summary>
-        /// <param name="subword">The enumeration of the word to populate the tree</param>
-        /// <param name="depth">The depth of the node</param>
-        /// <param name="parent">The parent node</param>
-        public DictNode(CharEnumerator subword, int depth, DictNode parent) : this(subword, depth)
-        {
-            Parent = parent;
         }
 
         /// <summary>
@@ -138,13 +127,46 @@ namespace WordSolver.Dictionary
         /// Find all words in the sub-tree from here
         /// </summary>
         /// <param name="node">The node in the LetterGrid that should align with this node in the dictionary tree</param>
-        public void FindAllWords(LetterGrid.Node node)
+        public void FindAllWords(LetterGrid.Node node, bool allowMultiWords, Solutions.PartialSoln soln = null)
         {
             node.Use();
-            if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
+
+            if (IsWord)
+            {
+                if (allowMultiWords)
+                {
+                    if (!node.ParentGrid.CheckForMandatoryNodes())
+                    {
+                        if (soln == null)
+                        {
+                            soln = new Solutions.PartialSoln();
+                        }
+                        //soln.AddWord(this.ToString());
+                        this.Root.FindAllWords(node, allowMultiWords, new Solutions.PartialSoln(soln, this.ToString()));
+                    }
+                    else
+                    {
+                        if (soln == null)
+                        {
+                            Solutions.AddWord(this.ToString());
+                        }
+                        else
+                        {
+                            //Solutions.AddWord(new Solutions.PartialSoln(soln.AddWord(this.ToString())));
+                            Solutions.AddWord(new Solutions.PartialSoln(soln, this.ToString()));
+                        }
+                    }
+                }
+                else if (Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
+                {
+                    Solutions.AddWord(this.ToString());
+                }
+            }
+
+            /* if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
             {
                 Solutions.AddWord(this.ToString());
-            }
+            } */
             
             foreach (LetterGrid.Node n in node.GetAdjacentNodes())
             {
@@ -154,7 +176,7 @@ namespace WordSolver.Dictionary
                     {
                         if (n.GetLetter() == n2.LetterEnum)
                         {
-                            n2.FindAllWords(n);
+                            n2.FindAllWords(n, allowMultiWords, new Solutions.PartialSoln(soln));
                             n.Release();
                             break;
                         }
@@ -185,7 +207,7 @@ namespace WordSolver.Dictionary
         {
             if (_word == null)
             {
-                if (Parent != null)
+                if (Parent as DictNode != null)
                 {
                     _word = Parent.ToString() + Letter;
                 }

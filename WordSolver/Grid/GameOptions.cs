@@ -52,6 +52,23 @@ namespace WordSolver.Grid
             }
         }
 
+        public bool MultiWords
+        {
+            get
+            {
+                if (!IsAnagram)
+                {
+                    return false;
+                }
+                return _multiWords;
+            }
+            set
+            {
+                _multiWords = value;
+            }
+        }
+        private bool _multiWords;
+
         private int _anagramLength;
         private bool _connectingLetters;
 

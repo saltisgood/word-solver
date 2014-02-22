@@ -47,6 +47,11 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.multiWordsCheck = new System.Windows.Forms.CheckBox();
+            this.anagramSetupButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.anagramTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.connectingLetterCheck = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -62,9 +67,8 @@
             this.dictSaver = new System.ComponentModel.BackgroundWorker();
             this.dictPopulateList = new System.ComponentModel.BackgroundWorker();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.anagramTextBox = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.anagramSetupButton = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -73,6 +77,7 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // wordInput
@@ -225,6 +230,8 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.label6);
+            this.splitContainer1.Panel2.Controls.Add(this.multiWordsCheck);
             this.splitContainer1.Panel2.Controls.Add(this.anagramSetupButton);
             this.splitContainer1.Panel2.Controls.Add(this.label5);
             this.splitContainer1.Panel2.Controls.Add(this.anagramTextBox);
@@ -247,6 +254,62 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(513, 419);
             this.panel1.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(25, 163);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Multiple Words:";
+            // 
+            // multiWordsCheck
+            // 
+            this.multiWordsCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.multiWordsCheck.AutoSize = true;
+            this.multiWordsCheck.Checked = true;
+            this.multiWordsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.multiWordsCheck.Enabled = false;
+            this.multiWordsCheck.Location = new System.Drawing.Point(111, 163);
+            this.multiWordsCheck.Name = "multiWordsCheck";
+            this.multiWordsCheck.Size = new System.Drawing.Size(15, 14);
+            this.multiWordsCheck.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.multiWordsCheck, "Solutions can be made up of multiple words");
+            this.multiWordsCheck.UseVisualStyleBackColor = true;
+            // 
+            // anagramSetupButton
+            // 
+            this.anagramSetupButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.anagramSetupButton.Enabled = false;
+            this.anagramSetupButton.Location = new System.Drawing.Point(147, 191);
+            this.anagramSetupButton.Name = "anagramSetupButton";
+            this.anagramSetupButton.Size = new System.Drawing.Size(75, 23);
+            this.anagramSetupButton.TabIndex = 11;
+            this.anagramSetupButton.Text = "Setup";
+            this.anagramSetupButton.UseVisualStyleBackColor = true;
+            this.anagramSetupButton.Click += new System.EventHandler(this.anagramSetupButton_Click);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(26, 126);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(79, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Anagram Entry:";
+            // 
+            // anagramTextBox
+            // 
+            this.anagramTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.anagramTextBox.Enabled = false;
+            this.anagramTextBox.Location = new System.Drawing.Point(111, 123);
+            this.anagramTextBox.Name = "anagramTextBox";
+            this.anagramTextBox.Size = new System.Drawing.Size(152, 20);
+            this.anagramTextBox.TabIndex = 9;
+            this.anagramTextBox.TextChanged += new System.EventHandler(this.anagramTextBox_TextChanged);
             // 
             // label4
             // 
@@ -349,6 +412,7 @@
             // 
             // dictListBox
             // 
+            this.dictListBox.ContextMenuStrip = this.contextMenuStrip1;
             this.dictListBox.FormattingEnabled = true;
             this.dictListBox.Location = new System.Drawing.Point(11, 157);
             this.dictListBox.Name = "dictListBox";
@@ -393,37 +457,19 @@
             this.dictPopulateList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictPopulateList_DoWork);
             this.dictPopulateList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictPopulateList_RunWorkerCompleted);
             // 
-            // anagramTextBox
+            // contextMenuStrip1
             // 
-            this.anagramTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.anagramTextBox.Enabled = false;
-            this.anagramTextBox.Location = new System.Drawing.Point(111, 123);
-            this.anagramTextBox.Name = "anagramTextBox";
-            this.anagramTextBox.Size = new System.Drawing.Size(152, 20);
-            this.anagramTextBox.TabIndex = 9;
-            this.anagramTextBox.TextChanged += new System.EventHandler(this.anagramTextBox_TextChanged);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeWordToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
             // 
-            // label5
+            // removeWordToolStripMenuItem
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(26, 126);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Anagram Entry:";
-            // 
-            // anagramSetupButton
-            // 
-            this.anagramSetupButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.anagramSetupButton.Enabled = false;
-            this.anagramSetupButton.Location = new System.Drawing.Point(148, 149);
-            this.anagramSetupButton.Name = "anagramSetupButton";
-            this.anagramSetupButton.Size = new System.Drawing.Size(75, 23);
-            this.anagramSetupButton.TabIndex = 11;
-            this.anagramSetupButton.Text = "Setup";
-            this.anagramSetupButton.UseVisualStyleBackColor = true;
-            this.anagramSetupButton.Click += new System.EventHandler(this.anagramSetupButton_Click);
+            this.removeWordToolStripMenuItem.Name = "removeWordToolStripMenuItem";
+            this.removeWordToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.removeWordToolStripMenuItem.Text = "Remove Word";
+            this.removeWordToolStripMenuItem.Click += new System.EventHandler(this.removeWordToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -447,6 +493,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -490,6 +537,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox anagramTextBox;
         private System.Windows.Forms.Button anagramSetupButton;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox multiWordsCheck;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem removeWordToolStripMenuItem;
     }
 }
 

@@ -66,7 +66,7 @@ namespace WordSolver.Dictionary
                 }
             }
 
-            Children.Add(new DictNode(charEnum, 0));
+            Children.Add(new DictNode(charEnum, 0, this));
             WordCount++;
             return true;
         }
@@ -99,15 +99,34 @@ namespace WordSolver.Dictionary
         /// Find all the words in the dictionary given a starting node in the LetterGrid
         /// </summary>
         /// <param name="node">The node in the LetterGrid to start with</param>
-        public void FindAllWords(LetterGrid.Node node)
+        public void FindAllWords(LetterGrid.Node node, bool allowMultiWords)
         {
             foreach (DictNode n in Children)
             {
                 if (n.LetterEnum == node.GetLetter())
                 {
-                    n.FindAllWords(node);
+                    n.FindAllWords(node, allowMultiWords);
                     node.Release();
                     break;
+                }
+            }
+        }
+
+        public void FindAllWords(LetterGrid.Node node, bool allowMultiWords, Solutions.PartialSoln soln)
+        {
+            foreach (LetterGrid.Node n in node.GetAdjacentNodes())
+            {
+                if (!n.IsUsed())
+                {
+                    foreach (DictNode n2 in Children)
+                    {
+                        if (n.GetLetter() == n2.LetterEnum)
+                        {
+                            n2.FindAllWords(n, allowMultiWords, new Solutions.PartialSoln(soln));
+                            n.Release();
+                            break;
+                        }
+                    }
                 }
             }
         }

@@ -384,7 +384,7 @@ namespace WordSolver.Grid
             {
                 foreach (Node n in nodes)
                 {
-                    ParentWindow.Tree.FindAllWords(n);
+                    ParentWindow.Tree.FindAllWords(n, Options.MultiWords);
                 }
             }
         }

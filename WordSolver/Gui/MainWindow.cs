@@ -57,6 +57,7 @@ namespace WordSolver.Gui
         /// Boolean used for determining whether to save the dictionary after it's finished loading
         /// </summary>
         private bool SaveWhenFinished = false;
+        private bool IgnoreErrors = false;
 
         /// <summary>
         /// Default constructor. Initialises all necessary components
@@ -152,7 +153,7 @@ namespace WordSolver.Gui
                 return;
             }
 
-            preBGW(true);
+            preBGW(true, false);
             dictLoader.RunWorkerAsync(openFile.FileName);
         }
 
@@ -170,7 +171,7 @@ namespace WordSolver.Gui
                 return;
             }
 
-            preBGW(true);
+            preBGW(true, false);
             dictLoader.RunWorkerAsync(folderSelect.SelectedPath);
         }
 
@@ -217,6 +218,7 @@ namespace WordSolver.Gui
                     GameGrid.FindWords();
                     break;
                 case 1: // Anagram
+                    AnagramGrid.Options.MultiWords = multiWordsCheck.Checked;
                     AnagramGrid.FindWords();
                     break;
                 default:
@@ -285,7 +287,7 @@ namespace WordSolver.Gui
                 return false;
             }
 
-            preBGW(false);
+            preBGW(false, false);
             dictLoader.RunWorkerAsync(path);
             return true;
         }
@@ -306,7 +308,7 @@ namespace WordSolver.Gui
                 return;
             }
 
-            preBGW(true);
+            preBGW(true, false);
             dictLoader.RunWorkerAsync(folderSelect.SelectedPath);
         }
 
@@ -314,7 +316,7 @@ namespace WordSolver.Gui
         /// Helper method that should be called from the main thread prior to starting the background dictionary loader
         /// </summary>
         /// <param name="postSave">True to save the dictionary after loading</param>
-        private void preBGW(bool postSave)
+        private void preBGW(bool postSave, bool ignoreErrors)
         {
             pb1.Value = 0;
             pb1.Show();
@@ -322,6 +324,7 @@ namespace WordSolver.Gui
             dictStatusLabel.Show();
             dictionaryToolStripMenuItem.Enabled = false;
             SaveWhenFinished = postSave;
+            IgnoreErrors = ignoreErrors;
         }
 
         /// <summary>
@@ -383,7 +386,10 @@ namespace WordSolver.Gui
                     while ((line = sr.ReadLine()) != null)
                     {
                         line = line.Trim().ToLowerInvariant();
-                        Tree.AddWord(line);
+                        if (!LetterUtil.ContainsInvalidLetters(line))
+                        {
+                            Tree.AddWord(line);
+                        }
                     }
                 }
             }
@@ -411,6 +417,7 @@ namespace WordSolver.Gui
         private void dictLoader_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             bool? result = e.Result as bool?;
+            Exception error = e.Result as Exception;
 
             if (e.Error != null)
             {
@@ -430,6 +437,10 @@ namespace WordSolver.Gui
                 {
                     MessageBox.Show("Error loading");
                 }
+            }
+            else if (error != null)
+            {
+                MessageBox.Show("An error occurred whilst loading the dictionary: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             pb1.Hide();
@@ -558,12 +569,14 @@ namespace WordSolver.Gui
                     GameTypeIndex = 0;
                     anagramTextBox.Enabled = false;
                     anagramSetupButton.Enabled = false;
+                    multiWordsCheck.Enabled = false;
                     break;
                 case 1:
                     comboBox1.Enabled = false;
                     connectingLetterCheck.Enabled = false;
                     GameTypeIndex = 1;
                     anagramTextBox.Enabled = true;
+                    multiWordsCheck.Enabled = true;
                     if (!String.IsNullOrWhiteSpace(anagramTextBox.Text))
                     {
                         anagramSetupButton.Enabled = true;
@@ -620,6 +633,30 @@ namespace WordSolver.Gui
                     break;
                 default:
                     throw new InvalidOperationException("GameTypeIndex has unexpected value");
+            }
+        }
+
+        private void removeWordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            String word = dictListBox.SelectedItem as String;
+            if (String.IsNullOrWhiteSpace(word))
+            {
+                return;
+            }
+
+            if (MessageBox.Show("Remove " + word + " from the dictionary?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.No)
+            {
+                return;
+            }
+
+            if (Tree.RemoveWord(word))
+            {
+                wordInput_TextChanged(null, null);
+                MessageBox.Show(word + " removed from the dictionary. Remember to save the dictionary for changes to persist.", "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            else
+            {
+                MessageBox.Show(word + " could not be removed from the dictionary for some reason. ", "Operation Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
     }
