@@ -47,6 +47,12 @@
   <ItemGroup>
     <Compile Include="Dictionary\DictTree.cs" />
     <Compile Include="Grid\GameOptions.cs" />
+    <Compile Include="Gui\AddDictMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\AddDictMenu.Designer.cs">
+      <DependentUpon>AddDictMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gui\LetterButtonContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -81,6 +87,9 @@
     <Compile Include="Dictionary\DictNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Gui\AddDictMenu.resx">
+      <DependentUpon>AddDictMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Gui\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

@@ -15,11 +15,6 @@ namespace WordSolver.Dictionary
     public class DictTree : TreeTraverse
     {
         /// <summary>
-        /// The minimum length of the words to find
-        /// </summary>
-        public const int MIN_WORD_LENGTH = 3;
-
-        /// <summary>
         /// The total word count in the dictionary
         /// </summary>
         public int WordCount

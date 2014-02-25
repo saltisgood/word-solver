@@ -28,24 +28,5 @@ namespace WordSolver.Gui
 
             Tree = tree;
         }
-
-        private void removeFromDictionaryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            object selectedItem = listBox1.SelectedItem;
-            if (selectedItem == null)
-            {
-                return;
-            }
-
-            if (Tree.RemoveWord(selectedItem.ToString()))
-            {
-                listBox1.Items.Remove(selectedItem);
-                MessageBox.Show(selectedItem.ToString() + " removed from dictionary. Remember to save dictionary when finished.", "Word removed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
-            else
-            {
-                MessageBox.Show("Unable to remove " + selectedItem.ToString() + " from dictionary", "Error removing word", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
     }
 }

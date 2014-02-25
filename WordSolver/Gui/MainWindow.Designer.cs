@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.wordInput = new System.Windows.Forms.TextBox();
-            this.checkWordButton = new System.Windows.Forms.Button();
+            this.addWordButton = new System.Windows.Forms.Button();
             this.dictLoader = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,14 +61,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dictListBox = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dictStatusLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dictSizeLabel = new System.Windows.Forms.Label();
             this.dictSaver = new System.ComponentModel.BackgroundWorker();
             this.dictPopulateList = new System.ComponentModel.BackgroundWorker();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.removeWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -82,21 +82,21 @@
             // 
             // wordInput
             // 
-            this.wordInput.Location = new System.Drawing.Point(9, 89);
+            this.wordInput.Location = new System.Drawing.Point(11, 49);
             this.wordInput.Name = "wordInput";
-            this.wordInput.Size = new System.Drawing.Size(171, 20);
+            this.wordInput.Size = new System.Drawing.Size(260, 20);
             this.wordInput.TabIndex = 1;
             this.wordInput.TextChanged += new System.EventHandler(this.wordInput_TextChanged);
             // 
-            // checkWordButton
+            // addWordButton
             // 
-            this.checkWordButton.Location = new System.Drawing.Point(51, 115);
-            this.checkWordButton.Name = "checkWordButton";
-            this.checkWordButton.Size = new System.Drawing.Size(75, 23);
-            this.checkWordButton.TabIndex = 2;
-            this.checkWordButton.Text = "Check";
-            this.checkWordButton.UseVisualStyleBackColor = true;
-            this.checkWordButton.Click += new System.EventHandler(this.checkWordClick);
+            this.addWordButton.Location = new System.Drawing.Point(277, 47);
+            this.addWordButton.Name = "addWordButton";
+            this.addWordButton.Size = new System.Drawing.Size(75, 23);
+            this.addWordButton.TabIndex = 2;
+            this.addWordButton.Text = "Add Word";
+            this.addWordButton.UseVisualStyleBackColor = true;
+            this.addWordButton.Click += new System.EventHandler(this.addWordClick);
             // 
             // dictLoader
             // 
@@ -134,7 +134,7 @@
             this.addFolderToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.dictionaryToolStripMenuItem.Name = "dictionaryToolStripMenuItem";
-            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dictionaryToolStripMenuItem.Text = "Dictionary";
             // 
             // resetToolStripMenuItem
@@ -168,8 +168,9 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // gridToolStripMenuItem
             // 
@@ -178,6 +179,7 @@
             this.gridToolStripMenuItem.Name = "gridToolStripMenuItem";
             this.gridToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.gridToolStripMenuItem.Text = "Grid";
+            this.gridToolStripMenuItem.Visible = false;
             // 
             // quickEnterToolStripMenuItem
             // 
@@ -193,6 +195,7 @@
             this.pb1.Name = "pb1";
             this.pb1.Size = new System.Drawing.Size(785, 23);
             this.pb1.TabIndex = 4;
+            this.pb1.Visible = false;
             // 
             // tabControl1
             // 
@@ -361,6 +364,7 @@
             // 
             // findWordsButton
             // 
+            this.findWordsButton.Enabled = false;
             this.findWordsButton.Location = new System.Drawing.Point(74, 288);
             this.findWordsButton.Name = "findWordsButton";
             this.findWordsButton.Size = new System.Drawing.Size(75, 23);
@@ -401,7 +405,7 @@
             this.tabPage2.Controls.Add(this.dictSizeLabel);
             this.tabPage2.Controls.Add(this.pb1);
             this.tabPage2.Controls.Add(this.wordInput);
-            this.tabPage2.Controls.Add(this.checkWordButton);
+            this.tabPage2.Controls.Add(this.addWordButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -414,24 +418,40 @@
             // 
             this.dictListBox.ContextMenuStrip = this.contextMenuStrip1;
             this.dictListBox.FormattingEnabled = true;
-            this.dictListBox.Location = new System.Drawing.Point(11, 157);
+            this.dictListBox.Location = new System.Drawing.Point(11, 84);
             this.dictListBox.Name = "dictListBox";
-            this.dictListBox.Size = new System.Drawing.Size(260, 212);
+            this.dictListBox.Size = new System.Drawing.Size(260, 277);
             this.dictListBox.TabIndex = 8;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeWordToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(150, 26);
+            // 
+            // removeWordToolStripMenuItem
+            // 
+            this.removeWordToolStripMenuItem.Name = "removeWordToolStripMenuItem";
+            this.removeWordToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.removeWordToolStripMenuItem.Text = "Remove Word";
+            this.removeWordToolStripMenuItem.Click += new System.EventHandler(this.removeWordToolStripMenuItem_Click);
             // 
             // dictStatusLabel
             // 
+            this.dictStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.dictStatusLabel.AutoSize = true;
-            this.dictStatusLabel.Location = new System.Drawing.Point(7, 372);
+            this.dictStatusLabel.Location = new System.Drawing.Point(8, 383);
             this.dictStatusLabel.Name = "dictStatusLabel";
             this.dictStatusLabel.Size = new System.Drawing.Size(43, 13);
             this.dictStatusLabel.TabIndex = 7;
             this.dictStatusLabel.Text = "Status: ";
+            this.dictStatusLabel.Visible = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 73);
+            this.label1.Location = new System.Drawing.Point(8, 33);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 13);
             this.label1.TabIndex = 6;
@@ -440,11 +460,11 @@
             // dictSizeLabel
             // 
             this.dictSizeLabel.AutoSize = true;
-            this.dictSizeLabel.Location = new System.Drawing.Point(6, 3);
+            this.dictSizeLabel.Location = new System.Drawing.Point(8, 3);
             this.dictSizeLabel.Name = "dictSizeLabel";
-            this.dictSizeLabel.Size = new System.Drawing.Size(80, 13);
+            this.dictSizeLabel.Size = new System.Drawing.Size(89, 13);
             this.dictSizeLabel.TabIndex = 5;
-            this.dictSizeLabel.Text = "Dictionary Size:";
+            this.dictSizeLabel.Text = "Dictionary Size: 0";
             // 
             // dictSaver
             // 
@@ -457,20 +477,6 @@
             this.dictPopulateList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictPopulateList_DoWork);
             this.dictPopulateList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictPopulateList_RunWorkerCompleted);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.removeWordToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
-            // 
-            // removeWordToolStripMenuItem
-            // 
-            this.removeWordToolStripMenuItem.Name = "removeWordToolStripMenuItem";
-            this.removeWordToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.removeWordToolStripMenuItem.Text = "Remove Word";
-            this.removeWordToolStripMenuItem.Click += new System.EventHandler(this.removeWordToolStripMenuItem_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -481,6 +487,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
             this.Text = "Nick\'s Word Machine";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Shown += new System.EventHandler(this.MainWindowShown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -502,7 +509,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox wordInput;
-        private System.Windows.Forms.Button checkWordButton;
+        private System.Windows.Forms.Button addWordButton;
         private System.ComponentModel.BackgroundWorker dictLoader;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;

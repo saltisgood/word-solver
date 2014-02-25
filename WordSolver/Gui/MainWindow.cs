@@ -58,6 +58,7 @@ namespace WordSolver.Gui
         /// </summary>
         private bool SaveWhenFinished = false;
         private bool IgnoreErrors = false;
+        private bool SaveOnExit = false;
 
         /// <summary>
         /// Default constructor. Initialises all necessary components
@@ -90,28 +91,26 @@ namespace WordSolver.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkWordClick(object sender, EventArgs e)
+        private void addWordClick(object sender, EventArgs e)
         {
-            String input = wordInput.Text;
-            if (String.IsNullOrWhiteSpace(input))
+            String text = wordInput.Text;
+            if (String.IsNullOrWhiteSpace(text))
             {
-                MessageBox.Show("No input detected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Type in a word to add in the text box", "No word entered", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (Tree == null)
+            if (Tree.AddWord(text))
             {
-                MessageBox.Show("Dictionary not initialised", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (Tree.FindWord(input))
-            {
-                MessageBox.Show("Word found", "Yay!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                dictSizeLabel.Text = DICT_LABEL_PROMPT + Tree.WordCount;
+                wordInput_TextChanged(null, null);
+                findWordsButton.Enabled = true;
+                SaveOnExit = true;
+                MessageBox.Show(text + " has been added to the dictionary!", "Word added", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             else
             {
-                MessageBox.Show("Word not found :(", "Aww...", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show(text + " is already in the dictionary", "Existing word entered", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -142,7 +141,7 @@ namespace WordSolver.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void addFileToolStripMenuItem_Click(object sender, EventArgs e)
+        public void addFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
             openFile.CheckFileExists = true;
@@ -162,7 +161,7 @@ namespace WordSolver.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void addFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        public void addFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderSelect = new FolderBrowserDialog();
             folderSelect.Description = "Select the folder with your dictionary files";
@@ -299,17 +298,10 @@ namespace WordSolver.Gui
         private void initialiseDictionary()
         {
             Tree = new DictTree();
+            dictSizeLabel.Text = DICT_LABEL_PROMPT + "0";
 
-            FolderBrowserDialog folderSelect = new FolderBrowserDialog();
-            folderSelect.Description = "Select the folder with your dictionary files";
-            if (folderSelect.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-            {
-                MessageBox.Show("Dictionary initialisation canceled. Please add files with the menu later", "Operation canceled", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                return;
-            }
-
-            preBGW(true, false);
-            dictLoader.RunWorkerAsync(folderSelect.SelectedPath);
+            AddDictMenu addDict = new AddDictMenu(this);
+            addDict.ShowDialog();
         }
 
         /// <summary>
@@ -432,6 +424,7 @@ namespace WordSolver.Gui
                 if (result.Value)
                 {
                     dictSizeLabel.Text = DICT_LABEL_PROMPT + Tree.WordCount;
+                    findWordsButton.Enabled = true;
                 }
                 else
                 {
@@ -498,6 +491,7 @@ namespace WordSolver.Gui
         /// <param name="e"></param>
         private void dictSaver_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            SaveOnExit = false;
             saveToolStripMenuItem.Enabled = true;
 
             bool? result = e.Result as bool?;
@@ -652,12 +646,45 @@ namespace WordSolver.Gui
             if (Tree.RemoveWord(word))
             {
                 wordInput_TextChanged(null, null);
-                MessageBox.Show(word + " removed from the dictionary. Remember to save the dictionary for changes to persist.", "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                SaveOnExit = true;
+                MessageBox.Show(word + " removed from the dictionary", "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             else
             {
                 MessageBox.Show(word + " could not be removed from the dictionary for some reason. ", "Operation Failed", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
+        }
+
+        public bool HasPopulatedTree()
+        {
+            if (Tree != null && Tree.WordCount > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (SaveOnExit && !dictSaver.IsBusy)
+            {
+                dictSaver.RunWorkerAsync();
+            }
+
+            if (dictSaver.IsBusy)
+            {
+                this.UseWaitCursor = true;
+
+                while (dictSaver.IsBusy)
+                {
+                    Application.DoEvents();
+                }
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

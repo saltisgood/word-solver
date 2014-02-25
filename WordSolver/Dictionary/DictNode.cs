@@ -157,7 +157,7 @@ namespace WordSolver.Dictionary
                         }
                     }
                 }
-                else if (Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
+                else if (Depth >= (Properties.Settings.Default.MinWordLength - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
                 {
                     Solutions.AddWord(this.ToString());
                 }
