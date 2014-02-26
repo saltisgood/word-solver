@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WordSolver.Dictionary
 {
@@ -12,7 +8,7 @@ namespace WordSolver.Dictionary
     public abstract class TreeTraverse
     {
         /// <summary>
-        /// The parent node of the node
+        /// The parent of the node
         /// </summary>
         public TreeTraverse Parent
         {
@@ -29,6 +25,9 @@ namespace WordSolver.Dictionary
             protected set;
         }
 
+        /// <summary>
+        /// The root of the tree. Note that this is the actual DictTree object, not a DictNode.
+        /// </summary>
         public DictTree Root
         {
             get
@@ -45,13 +44,17 @@ namespace WordSolver.Dictionary
         }
 
         /// <summary>
-        /// Base constructor. Should always be called from sub-classes to initialise the list of children
+        /// Use this constructor to set the parent of the new node. Should be used for all nodes with a parent,
+        /// i.e. all but the root.
         /// </summary>
         public TreeTraverse(TreeTraverse parent) : this()
         {
             Parent = parent;
         }
 
+        /// <summary>
+        /// Base constructor. Should always be called from sub-classes to initialise the list of children.
+        /// </summary>
         public TreeTraverse()
         {
             Children = new List<DictNode>();

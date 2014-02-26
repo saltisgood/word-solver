@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 
 namespace WordSolver.Util
 {
@@ -23,72 +18,25 @@ namespace WordSolver.Util
             ER = 29, EST = 30, RE = 31, TO = 32, VE = 33, SPACE = -2
         }
 
+
+
         /// <summary>
-        /// Get an enum from a char value
+        /// Check whether a word contains a character that's not lowercase a-z
         /// </summary>
-        /// <param name="c">The char value to convert</param>
-        /// <returns>The enum representation</returns>
-        public static Letter GetLetter(char c)
+        /// <param name="word">The word to check</param>
+        /// <returns>True if there's an invalid letter, false otherwise</returns>
+        public static bool ContainsInvalidLetters(String word)
         {
-            switch (c)
+            CharEnumerator charEnum = word.GetEnumerator();
+            while (charEnum.MoveNext())
             {
-                case 'a': case 'A':
-                    return Letter.A;
-                case 'b': case 'B':
-                    return Letter.B;
-                case 'c': case 'C':
-                    return Letter.C;
-                case 'd': case 'D':
-                    return Letter.D;
-                case 'e': case 'E':
-                    return Letter.E;
-                case 'f': case 'F':
-                    return Letter.F;
-                case 'g': case 'G':
-                    return Letter.G;
-                case 'h': case 'H':
-                    return Letter.H;
-                case 'i': case 'I':
-                    return Letter.I;
-                case 'j': case 'J':
-                    return Letter.J;
-                case 'k': case 'K':
-                    return Letter.K;
-                case 'l': case 'L':
-                    return Letter.L;
-                case 'm': case 'M':
-                    return Letter.M;
-                case 'n': case 'N':
-                    return Letter.N;
-                case 'o': case 'O':
-                    return Letter.O;
-                case 'p': case 'P':
-                    return Letter.P;
-                case 'q': case 'Q':
-                    return Letter.Q;
-                case 'r': case 'R':
-                    return Letter.R;
-                case 's': case 'S':
-                    return Letter.S;
-                case 't': case 'T':
-                    return Letter.T;
-                case 'u': case 'U':
-                    return Letter.U;
-                case 'v': case 'V':
-                    return Letter.V;
-                case 'w': case 'W':
-                    return Letter.W;
-                case 'x': case 'X':
-                    return Letter.X;
-                case 'y': case 'Y':
-                    return Letter.Y;
-                case 'z': case 'Z':
-                    return Letter.Z;
-                case ' ':
-                    return Letter.SPACE;
-                default:
-                    throw new ArgumentException();
+                if (charEnum.Current < 'a' || charEnum.Current > 'z')
+                {
+                    return true;
+                }
             }
+
+            return false;
         }
 
         /// <summary>
@@ -170,11 +118,109 @@ namespace WordSolver.Util
                     return "DE";
                 case Letter.SPACE:
                     return " ";
-                case Letter.UNKNOWN: default:
+                case Letter.UNKNOWN:
+                default:
                     throw new ArgumentException("Cannot unknown letter to string");
             }
         }
 
+        /// <summary>
+        /// Get an enum from a char value
+        /// </summary>
+        /// <param name="c">The char value to convert</param>
+        /// <returns>The enum representation</returns>
+        public static Letter GetLetter(char c)
+        {
+            switch (c)
+            {
+                case 'a': case 'A':
+                    return Letter.A;
+                case 'b': case 'B':
+                    return Letter.B;
+                case 'c': case 'C':
+                    return Letter.C;
+                case 'd': case 'D':
+                    return Letter.D;
+                case 'e': case 'E':
+                    return Letter.E;
+                case 'f': case 'F':
+                    return Letter.F;
+                case 'g': case 'G':
+                    return Letter.G;
+                case 'h': case 'H':
+                    return Letter.H;
+                case 'i': case 'I':
+                    return Letter.I;
+                case 'j': case 'J':
+                    return Letter.J;
+                case 'k': case 'K':
+                    return Letter.K;
+                case 'l': case 'L':
+                    return Letter.L;
+                case 'm': case 'M':
+                    return Letter.M;
+                case 'n': case 'N':
+                    return Letter.N;
+                case 'o': case 'O':
+                    return Letter.O;
+                case 'p': case 'P':
+                    return Letter.P;
+                case 'q': case 'Q':
+                    return Letter.Q;
+                case 'r': case 'R':
+                    return Letter.R;
+                case 's': case 'S':
+                    return Letter.S;
+                case 't': case 'T':
+                    return Letter.T;
+                case 'u': case 'U':
+                    return Letter.U;
+                case 'v': case 'V':
+                    return Letter.V;
+                case 'w': case 'W':
+                    return Letter.W;
+                case 'x': case 'X':
+                    return Letter.X;
+                case 'y': case 'Y':
+                    return Letter.Y;
+                case 'z': case 'Z':
+                    return Letter.Z;
+                case ' ':
+                    return Letter.SPACE;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        /// <summary>
+        /// Get the number of letters in a Letter enum. This is for looking at di/trigrams.
+        /// </summary>
+        /// <param name="letter">The enum to check</param>
+        /// <returns>The number of letters</returns>
+        public static int GetLetterLength(Letter letter)
+        {
+            switch (letter)
+            {
+                case Letter.ER:
+                case Letter.AR:
+                case Letter.CH:
+                case Letter.DE:
+                case Letter.RE:
+                case Letter.TO:
+                case Letter.VE:
+                    return 2;
+                case Letter.EST:
+                    return 3;
+                default:
+                    return 1;
+            }
+        }
+
+        /// <summary>
+        /// Get a numerical score for a letter. Uses Wordament's general scoring system.
+        /// </summary>
+        /// <param name="letter">The letter to check</param>
+        /// <returns>A value for the letter</returns>
         public static int GetLetterScore(Letter letter)
         {
             switch (letter)
@@ -253,11 +299,21 @@ namespace WordSolver.Util
             }
         }
 
+        /// <summary>
+        /// Convenience method for calling GetLetterScore(Letter letter) without first converting to the enum form
+        /// </summary>
+        /// <param name="c">The character to get the value of</param>
+        /// <returns>The value of the character</returns>
         public static int GetLetterScore(char c)
         {
             return GetLetterScore(GetLetter(c));
         }
 
+        /// <summary>
+        /// Get the score for a word. Uses Wordament style scoring.
+        /// </summary>
+        /// <param name="word">The word to check</param>
+        /// <returns>The value of the word</returns>
         public static int GetWordScore(String word)
         {
             int score = 0, count = 0;
@@ -390,39 +446,6 @@ namespace WordSolver.Util
             letters[0] = SplitDigram(digram, 0);
             letters[1] = SplitDigram(digram, 1);
             return letters;
-        }
-
-        public static int GetLetterLength(Letter letter)
-        {
-            switch (letter)
-            {
-                case Letter.ER:
-                case Letter.AR:
-                case Letter.CH:
-                case Letter.DE:
-                case Letter.RE:
-                case Letter.TO:
-                case Letter.VE:
-                    return 2;
-                case Letter.EST:
-                    return 3;
-                default:
-                    return 1;
-            }
-        }
-
-        public static bool ContainsInvalidLetters(String word)
-        {
-            CharEnumerator charEnum = word.GetEnumerator();
-            while (charEnum.MoveNext())
-            {
-                if (charEnum.Current < 'a' || charEnum.Current > 'z')
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
-using WordSolver.Util;
+using System.Windows.Forms;
 using WordSolver.Grid;
+using WordSolver.Util;
 
 namespace WordSolver.Gui
 {
@@ -16,38 +12,14 @@ namespace WordSolver.Gui
     public class LetterButton : Button
     {
         /// <summary>
-        /// The selected letter to display on the button
+        /// Is the button representing an add letter button. i.e. does it have a "+" and when the user
+        /// clicks on it, should it add a new letter ot the grid.
         /// </summary>
-        public LetterUtil.Letter SelectedLetter
+        public bool IsAddLetter
         {
             get
             {
-                return _selectedLetter;
-            }
-            set
-            {
-                _selectedLetter = value;
-                this.Text = GetText(this);
-            }
-        }
-
-
-        private LetterUtil.Letter _selectedLetter = LetterUtil.Letter.A;
-
-        /// <summary>
-        /// Whether this letter is required to be used in a word
-        /// </summary>
-        public bool IsRequired = false;
-        /// <summary>
-        /// The restriction of the position of the letter in the word
-        /// </summary>
-        public PositionRestriction Restriction = PositionRestriction.NONE;
-
-        public bool IsAddLetter
-        { 
-            get 
-            { 
-                return _isAddLetter; 
+                return _isAddLetter;
             }
 
             set
@@ -73,11 +45,54 @@ namespace WordSolver.Gui
                 }
             }
         }
+        /// <summary>
+        /// The private data store for the IsAddLetter property
+        /// </summary>
         private bool _isAddLetter;
 
-        private LetterGrid ParentGrid;
+        /// <summary>
+        /// Whether this letter is required to be used in a word
+        /// </summary>
+        public bool IsRequired = false;
 
+        /// <summary>
+        /// The restriction of the position of the letter in the word
+        /// </summary>
+        public PositionRestriction Restriction = PositionRestriction.NONE;
+
+        /// <summary>
+        /// The selected letter to display on the button
+        /// </summary>
+        public LetterUtil.Letter SelectedLetter
+        {
+            get
+            {
+                return _selectedLetter;
+            }
+            set
+            {
+                _selectedLetter = value;
+                this.Text = GetText(this);
+            }
+        }
+        /// <summary>
+        /// The private data store for the SelectedLetter property
+        /// </summary>
+        private LetterUtil.Letter _selectedLetter = LetterUtil.Letter.A;
+
+        
+
+        /// <summary>
+        /// A reference to the grid which this button is being displayed in
+        /// </summary>
+        private LetterGrid _parentGrid;
+
+        /// <summary>
+        /// The context menu to be displayed on a right-click on this button
+        /// </summary>
         private ContextMenuStrip _contextMenu;
+
+
 
         /// <summary>
         /// Standard constructor. Initialises all the event handlers and appearance of the button
@@ -102,68 +117,42 @@ namespace WordSolver.Gui
             this._contextMenu = new LetterButtonContextMenu(this);
         }
 
-        /// <summary>
-        /// Button click event handler. Opens the LetterSelectForm to select options to do with this button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SelectFormOnClick(object sender, EventArgs e)
-        {
-            new LetterSelectForm(this).ShowDialog();
-        }
 
-        private void AddLetterOnClick(object sender, EventArgs e)
-        {
-            this.IsAddLetter = false;
-            ParentGrid.AddLetter();
-        }
 
         /// <summary>
         /// Remove this letter from the grid
         /// </summary>
         public void Remove()
         {
-            ParentGrid.RemoveLetter(this);
+            _parentGrid.RemoveLetter(this);
         }
 
+        /// <summary>
+        /// Synchronise this button with a LetterGrid and sets options on this button
+        /// </summary>
+        /// <param name="parentGrid">The grid which this button is being displayed on</param>
+        /// <returns>A reference to this button for method chaining</returns>
         public LetterButton Sync(LetterGrid parentGrid)
         {
-            ParentGrid = parentGrid;
-            if (ParentGrid.Options.IsAnagram && !_isAddLetter)
+            _parentGrid = parentGrid;
+            if (_parentGrid.Options.IsAnagram && !_isAddLetter)
             {
                 this.ContextMenuStrip = _contextMenu;
             }
             return this;
         }
 
-        /// <summary>
-        /// Mouse entry event handler. This is called whenever the user's mouse enters the button's area and is used
-        /// to set the correct background colour as well as to focus on the control so that key presses are captured.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mouseEnter(object sender, EventArgs e)
-        {
-            this.BackColor = SystemColors.ButtonHighlight;
-            this.Focus();
-        }
+
 
         /// <summary>
-        /// Mouse leaving event handler. This is called whenever the user's mouse leaves the button's area and is used
-        /// to restore the correct background colour.
+        /// The click handler to be invoked when the button is supposed to add a letter to the grid
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void mouseLeave(object sender, EventArgs e)
+        private void AddLetterOnClick(object sender, EventArgs e)
         {
-            if (IsRequired)
-            {
-                this.BackColor = SystemColors.ControlDark;
-            }
-            else
-            {
-                this.BackColor = SystemColors.Control;
-            }
+            this.IsAddLetter = false;
+            _parentGrid.AddLetter();
         }
 
         /// <summary>
@@ -286,6 +275,54 @@ namespace WordSolver.Gui
             }
         }
 
+        /// <summary>
+        /// Mouse entry event handler. This is called whenever the user's mouse enters the button's area and is used
+        /// to set the correct background colour as well as to focus on the control so that key presses are captured.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mouseEnter(object sender, EventArgs e)
+        {
+            this.BackColor = SystemColors.ButtonHighlight;
+            this.Focus();
+        }
+
+        /// <summary>
+        /// Mouse leaving event handler. This is called whenever the user's mouse leaves the button's area and is used
+        /// to restore the correct background colour.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mouseLeave(object sender, EventArgs e)
+        {
+            if (IsRequired)
+            {
+                this.BackColor = SystemColors.ControlDark;
+            }
+            else
+            {
+                this.BackColor = SystemColors.Control;
+            }
+        }
+
+        /// <summary>
+        /// Button click event handler when the button is not supposed to add a letter. Opens the LetterSelectForm 
+        /// to select options to do with this button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectFormOnClick(object sender, EventArgs e)
+        {
+            new LetterSelectForm(this).ShowDialog();
+        }
+
+        
+
+        /// <summary>
+        /// Convenience method for getting the text to be displayed on the button
+        /// </summary>
+        /// <param name="button">The button which the text will be displayed on</param>
+        /// <returns>The text that should be shown on the button</returns>
         public static String GetText(LetterButton button)
         {
             if (button.IsAddLetter)

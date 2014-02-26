@@ -28,21 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.letterComBox = new System.Windows.Forms.ComboBox();
+            this.ComBoxLetter = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.requiredCheBox = new System.Windows.Forms.CheckBox();
+            this.CheBoxIsRequired = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.BtnOK = new System.Windows.Forms.Button();
+            this.BtnCancel = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.restrictionCombo = new System.Windows.Forms.ComboBox();
+            this.ComBoxPositionRestriction = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // letterComBox
+            // ComBoxLetter
             // 
-            this.letterComBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.letterComBox.FormattingEnabled = true;
-            this.letterComBox.Items.AddRange(new object[] {
+            this.ComBoxLetter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComBoxLetter.FormattingEnabled = true;
+            this.ComBoxLetter.Items.AddRange(new object[] {
             "A",
             "B",
             "C",
@@ -77,10 +77,10 @@
             "RE",
             "TO",
             "VE"});
-            this.letterComBox.Location = new System.Drawing.Point(162, 10);
-            this.letterComBox.Name = "letterComBox";
-            this.letterComBox.Size = new System.Drawing.Size(183, 21);
-            this.letterComBox.TabIndex = 0;
+            this.ComBoxLetter.Location = new System.Drawing.Point(162, 10);
+            this.ComBoxLetter.Name = "ComBoxLetter";
+            this.ComBoxLetter.Size = new System.Drawing.Size(183, 21);
+            this.ComBoxLetter.TabIndex = 0;
             // 
             // label1
             // 
@@ -91,15 +91,15 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Select the letter to use: ";
             // 
-            // requiredCheBox
+            // CheBoxIsRequired
             // 
-            this.requiredCheBox.AutoSize = true;
-            this.requiredCheBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.requiredCheBox.Location = new System.Drawing.Point(162, 46);
-            this.requiredCheBox.Name = "requiredCheBox";
-            this.requiredCheBox.Size = new System.Drawing.Size(15, 14);
-            this.requiredCheBox.TabIndex = 2;
-            this.requiredCheBox.UseVisualStyleBackColor = true;
+            this.CheBoxIsRequired.AutoSize = true;
+            this.CheBoxIsRequired.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.CheBoxIsRequired.Location = new System.Drawing.Point(162, 46);
+            this.CheBoxIsRequired.Name = "CheBoxIsRequired";
+            this.CheBoxIsRequired.Size = new System.Drawing.Size(15, 14);
+            this.CheBoxIsRequired.TabIndex = 2;
+            this.CheBoxIsRequired.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -110,30 +110,30 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Is Required?";
             // 
-            // button1
+            // BtnOK
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.BtnOK.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(36, 134);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.BtnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.BtnOK.Location = new System.Drawing.Point(36, 134);
+            this.BtnOK.Name = "BtnOK";
+            this.BtnOK.Size = new System.Drawing.Size(95, 23);
+            this.BtnOK.TabIndex = 4;
+            this.BtnOK.Text = "OK";
+            this.BtnOK.UseVisualStyleBackColor = true;
+            this.BtnOK.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // BtnCancel
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.BtnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(191, 134);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(95, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
+            this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.BtnCancel.Location = new System.Drawing.Point(191, 134);
+            this.BtnCancel.Name = "BtnCancel";
+            this.BtnCancel.Size = new System.Drawing.Size(95, 23);
+            this.BtnCancel.TabIndex = 5;
+            this.BtnCancel.Text = "Cancel";
+            this.BtnCancel.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -144,34 +144,34 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Word Position Restrictions:";
             // 
-            // restrictionCombo
+            // ComBoxPositionRestriction
             // 
-            this.restrictionCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.restrictionCombo.FormattingEnabled = true;
-            this.restrictionCombo.Items.AddRange(new object[] {
+            this.ComBoxPositionRestriction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComBoxPositionRestriction.FormattingEnabled = true;
+            this.ComBoxPositionRestriction.Items.AddRange(new object[] {
             "No Restrictions",
             "Start of the word",
             "End of the word"});
-            this.restrictionCombo.Location = new System.Drawing.Point(162, 77);
-            this.restrictionCombo.Name = "restrictionCombo";
-            this.restrictionCombo.Size = new System.Drawing.Size(183, 21);
-            this.restrictionCombo.TabIndex = 7;
+            this.ComBoxPositionRestriction.Location = new System.Drawing.Point(162, 77);
+            this.ComBoxPositionRestriction.Name = "ComBoxPositionRestriction";
+            this.ComBoxPositionRestriction.Size = new System.Drawing.Size(183, 21);
+            this.ComBoxPositionRestriction.TabIndex = 7;
             // 
             // LetterSelectForm
             // 
-            this.AcceptButton = this.button1;
+            this.AcceptButton = this.BtnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button2;
+            this.CancelButton = this.BtnCancel;
             this.ClientSize = new System.Drawing.Size(357, 167);
-            this.Controls.Add(this.restrictionCombo);
+            this.Controls.Add(this.ComBoxPositionRestriction);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.BtnCancel);
+            this.Controls.Add(this.BtnOK);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.requiredCheBox);
+            this.Controls.Add(this.CheBoxIsRequired);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.letterComBox);
+            this.Controls.Add(this.ComBoxLetter);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "LetterSelectForm";
             this.Text = "Select the letter options";
@@ -182,13 +182,13 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox letterComBox;
+        private System.Windows.Forms.ComboBox ComBoxLetter;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox requiredCheBox;
+        private System.Windows.Forms.CheckBox CheBoxIsRequired;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button BtnOK;
+        private System.Windows.Forms.Button BtnCancel;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox restrictionCombo;
+        private System.Windows.Forms.ComboBox ComBoxPositionRestriction;
     }
 }

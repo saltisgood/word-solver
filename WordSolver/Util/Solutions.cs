@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WordSolver.Util
 {
@@ -18,22 +16,18 @@ namespace WordSolver.Util
         {
             get
             {
-                return SolutionList.Count();
+                return _solutionList.Count();
             }
         }
+
+
 
         /// <summary>
         /// The list of solutions found
         /// </summary>
-        private static List<String> SolutionList = new List<string>();
+        private static List<String> _solutionList = new List<string>();
 
-        /// <summary>
-        /// Reset the solutions to an empty state
-        /// </summary>
-        public static void Reset()
-        {
-            SolutionList = new List<string>();
-        }
+
 
         /// <summary>
         /// Attempt to add a word to the solution list
@@ -42,14 +36,19 @@ namespace WordSolver.Util
         /// <returns>True if it's a new solution, false if it's already been found</returns>
         public static bool AddWord(String word)
         {
-            if (SolutionList.Contains(word))
+            if (_solutionList.Contains(word))
             {
                 return false;
             }
-            SolutionList.Add(word);
+            _solutionList.Add(word);
             return true;
         }
 
+        /// <summary>
+        /// Attempt to add a word to the solution list
+        /// </summary>
+        /// <param name="soln">The completed partial solution</param>
+        /// <returns>True if it's a new solution, false if it's already been found</returns>
         public static bool AddWord(PartialSoln soln)
         {
             String fullWord = String.Empty;
@@ -61,58 +60,90 @@ namespace WordSolver.Util
         }
 
         /// <summary>
-        /// Sort the completed solution list
-        /// </summary>
-        public static void Finish()
-        {
-            SolutionList.Sort(new SolutionSorter());
-        }
-
-        /// <summary>
         /// Get an enumeration of the solutions
         /// </summary>
         /// <returns>The enum of solutions</returns>
         public static List<String>.Enumerator Enumerate()
         {
-            return SolutionList.GetEnumerator();
+            return _solutionList.GetEnumerator();
         }
 
+        /// <summary>
+        /// Sort the completed solution list
+        /// </summary>
+        public static void Finish()
+        {
+            _solutionList.Sort(new SolutionSorter());
+        }
+
+        /// <summary>
+        /// Reset the solutions to an empty state
+        /// </summary>
+        public static void Reset()
+        {
+            _solutionList = new List<string>();
+        }
+        
+
+
+        /// <summary>
+        /// A representation of a partially found solution. Contains a list of words that make up a solution of
+        /// multiple words.
+        /// </summary>
         public class PartialSoln
         {
-            public List<String> Words
-            {
-                get 
-                { 
-                    return _words; 
-                }
-            }
-            private List<String> _words;
+            /// <summary>
+            /// The list of words that make up a solution.
+            /// </summary>
+            public readonly List<String> Words;
 
+
+
+            /// <summary>
+            /// Simplest constructor. Initialises an empty list of solutions.
+            /// </summary>
             public PartialSoln() 
             {
-                _words = new List<string>();
+                Words = new List<string>();
             }
 
+            /// <summary>
+            /// A constructor which copies across the list of words from another partial solution
+            /// </summary>
+            /// <param name="prevSoln">The other solution to copy values from</param>
             public PartialSoln(PartialSoln prevSoln)
             {
                 if (prevSoln == null)
                 {
-                    _words = new List<string>();
+                    Words = new List<string>();
                 }
                 else
                 {
-                    _words = new List<string>(prevSoln._words);
+                    Words = new List<string>(prevSoln.Words);
                 }
             }
 
+            /// <summary>
+            /// Convenience constructor used when you have a previous partial solution and a word to add at the same time.
+            /// </summary>
+            /// <param name="prevSoln">The partial solution to copy across</param>
+            /// <param name="nextWord">The word to add</param>
             public PartialSoln(PartialSoln prevSoln, String nextWord) : this(prevSoln)
             {
-                _words.Add(nextWord);
+                Words.Add(nextWord);
             }
 
+
+
+            /// <summary>
+            /// Convenience method to add a word to the list of partial solutions and return a reference to itself for
+            /// method chaining.
+            /// </summary>
+            /// <param name="word">The word to add</param>
+            /// <returns>A reference to this object for method chaining</returns>
             public PartialSoln AddWord(String word)
             {
-                _words.Add(word);
+                Words.Add(word);
                 return this;
             }
         }

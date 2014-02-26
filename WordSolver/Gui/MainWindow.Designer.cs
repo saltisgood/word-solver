@@ -29,43 +29,43 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.wordInput = new System.Windows.Forms.TextBox();
-            this.addWordButton = new System.Windows.Forms.Button();
+            this.TextBoxDictionarySearch = new System.Windows.Forms.TextBox();
+            this.BtnAddWord = new System.Windows.Forms.Button();
             this.dictLoader = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dictionaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quickEnterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pb1 = new System.Windows.Forms.ProgressBar();
+            this.MenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemDictionary = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemReset = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemAddFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemAddFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemGrid = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemQuickEnter = new System.Windows.Forms.ToolStripMenuItem();
+            this.Pb1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.GridPanel = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
-            this.multiWordsCheck = new System.Windows.Forms.CheckBox();
-            this.anagramSetupButton = new System.Windows.Forms.Button();
+            this.ChkBoxMultipleWords = new System.Windows.Forms.CheckBox();
+            this.BtnAnagramSetup = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.anagramTextBox = new System.Windows.Forms.TextBox();
+            this.TextBoxAnagramSetup = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.connectingLetterCheck = new System.Windows.Forms.CheckBox();
+            this.ChkBoxConnectingLetters = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.gameTypeCombo = new System.Windows.Forms.ComboBox();
-            this.findWordsButton = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.ComBoxGameType = new System.Windows.Forms.ComboBox();
+            this.BtnFindWords = new System.Windows.Forms.Button();
+            this.ComBoxGridSize = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dictListBox = new System.Windows.Forms.ListBox();
+            this.ListBoxDictionary = new System.Windows.Forms.ListBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dictStatusLabel = new System.Windows.Forms.Label();
+            this.LabelDictionaryStatus = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.dictSizeLabel = new System.Windows.Forms.Label();
+            this.LabelDictionarySave = new System.Windows.Forms.Label();
             this.dictSaver = new System.ComponentModel.BackgroundWorker();
             this.dictPopulateList = new System.ComponentModel.BackgroundWorker();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -80,122 +80,122 @@
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // wordInput
+            // TextBoxDictionarySearch
             // 
-            this.wordInput.Location = new System.Drawing.Point(11, 49);
-            this.wordInput.Name = "wordInput";
-            this.wordInput.Size = new System.Drawing.Size(260, 20);
-            this.wordInput.TabIndex = 1;
-            this.wordInput.TextChanged += new System.EventHandler(this.wordInput_TextChanged);
+            this.TextBoxDictionarySearch.Location = new System.Drawing.Point(11, 49);
+            this.TextBoxDictionarySearch.Name = "TextBoxDictionarySearch";
+            this.TextBoxDictionarySearch.Size = new System.Drawing.Size(260, 20);
+            this.TextBoxDictionarySearch.TabIndex = 1;
+            this.TextBoxDictionarySearch.TextChanged += new System.EventHandler(this.DictionarySearchTextBox_TextChanged);
             // 
-            // addWordButton
+            // BtnAddWord
             // 
-            this.addWordButton.Location = new System.Drawing.Point(277, 47);
-            this.addWordButton.Name = "addWordButton";
-            this.addWordButton.Size = new System.Drawing.Size(75, 23);
-            this.addWordButton.TabIndex = 2;
-            this.addWordButton.Text = "Add Word";
-            this.addWordButton.UseVisualStyleBackColor = true;
-            this.addWordButton.Click += new System.EventHandler(this.addWordClick);
+            this.BtnAddWord.Location = new System.Drawing.Point(277, 47);
+            this.BtnAddWord.Name = "BtnAddWord";
+            this.BtnAddWord.Size = new System.Drawing.Size(75, 23);
+            this.BtnAddWord.TabIndex = 2;
+            this.BtnAddWord.Text = "Add Word";
+            this.BtnAddWord.UseVisualStyleBackColor = true;
+            this.BtnAddWord.Click += new System.EventHandler(this.AddWordBtn_Click);
             // 
             // dictLoader
             // 
             this.dictLoader.WorkerReportsProgress = true;
             this.dictLoader.WorkerSupportsCancellation = true;
-            this.dictLoader.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictLoader_DoWork);
-            this.dictLoader.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.dictLoader_ProgressChanged);
-            this.dictLoader.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictLoader_RunWorkerCompleted);
+            this.dictLoader.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DictionaryLoader_DoWork);
+            this.dictLoader.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.DictionaryLoader_ProgressChanged);
+            this.dictLoader.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.DictionaryLoader_RunWorkerCompleted);
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.gridToolStripMenuItem});
+            this.MenuItemFile,
+            this.MenuItemGrid});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(799, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // MenuItemFile
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dictionaryToolStripMenuItem,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.MenuItemFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemDictionary,
+            this.MenuItemExit});
+            this.MenuItemFile.Name = "MenuItemFile";
+            this.MenuItemFile.Size = new System.Drawing.Size(37, 20);
+            this.MenuItemFile.Text = "File";
             // 
-            // dictionaryToolStripMenuItem
+            // MenuItemDictionary
             // 
-            this.dictionaryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetToolStripMenuItem,
-            this.addFileToolStripMenuItem,
-            this.addFolderToolStripMenuItem,
-            this.saveToolStripMenuItem});
-            this.dictionaryToolStripMenuItem.Name = "dictionaryToolStripMenuItem";
-            this.dictionaryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.dictionaryToolStripMenuItem.Text = "Dictionary";
+            this.MenuItemDictionary.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemReset,
+            this.MenuItemAddFile,
+            this.MenuItemAddFolder,
+            this.MenuItemSave});
+            this.MenuItemDictionary.Name = "MenuItemDictionary";
+            this.MenuItemDictionary.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemDictionary.Text = "Dictionary";
             // 
-            // resetToolStripMenuItem
+            // MenuItemReset
             // 
-            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.resetToolStripMenuItem.Text = "Reset";
-            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
+            this.MenuItemReset.Name = "MenuItemReset";
+            this.MenuItemReset.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemReset.Text = "Reset";
+            this.MenuItemReset.Click += new System.EventHandler(this.ResetDictionaryMenu_Click);
             // 
-            // addFileToolStripMenuItem
+            // MenuItemAddFile
             // 
-            this.addFileToolStripMenuItem.Name = "addFileToolStripMenuItem";
-            this.addFileToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.addFileToolStripMenuItem.Text = "Add File";
-            this.addFileToolStripMenuItem.Click += new System.EventHandler(this.addFileToolStripMenuItem_Click);
+            this.MenuItemAddFile.Name = "MenuItemAddFile";
+            this.MenuItemAddFile.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemAddFile.Text = "Add File";
+            this.MenuItemAddFile.Click += new System.EventHandler(this.AddFileToDictionaryMenu_Click);
             // 
-            // addFolderToolStripMenuItem
+            // MenuItemAddFolder
             // 
-            this.addFolderToolStripMenuItem.Name = "addFolderToolStripMenuItem";
-            this.addFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.addFolderToolStripMenuItem.Text = "Add Folder";
-            this.addFolderToolStripMenuItem.Click += new System.EventHandler(this.addFolderToolStripMenuItem_Click);
+            this.MenuItemAddFolder.Name = "MenuItemAddFolder";
+            this.MenuItemAddFolder.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemAddFolder.Text = "Add Folder";
+            this.MenuItemAddFolder.Click += new System.EventHandler(this.AddFolderToDictionaryMenu_Click);
             // 
-            // saveToolStripMenuItem
+            // MenuItemSave
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.MenuItemSave.Name = "MenuItemSave";
+            this.MenuItemSave.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemSave.Text = "Save";
+            this.MenuItemSave.Click += new System.EventHandler(this.SaveDictionaryMenu_Click);
             // 
-            // exitToolStripMenuItem
+            // MenuItemExit
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.MenuItemExit.Name = "MenuItemExit";
+            this.MenuItemExit.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemExit.Text = "Exit";
+            this.MenuItemExit.Click += new System.EventHandler(this.ExitFormMenu_Click);
             // 
-            // gridToolStripMenuItem
+            // MenuItemGrid
             // 
-            this.gridToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.quickEnterToolStripMenuItem});
-            this.gridToolStripMenuItem.Name = "gridToolStripMenuItem";
-            this.gridToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.gridToolStripMenuItem.Text = "Grid";
-            this.gridToolStripMenuItem.Visible = false;
+            this.MenuItemGrid.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemQuickEnter});
+            this.MenuItemGrid.Name = "MenuItemGrid";
+            this.MenuItemGrid.Size = new System.Drawing.Size(41, 20);
+            this.MenuItemGrid.Text = "Grid";
+            this.MenuItemGrid.Visible = false;
             // 
-            // quickEnterToolStripMenuItem
+            // MenuItemQuickEnter
             // 
-            this.quickEnterToolStripMenuItem.Name = "quickEnterToolStripMenuItem";
-            this.quickEnterToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.quickEnterToolStripMenuItem.Text = "Quick Enter";
-            this.quickEnterToolStripMenuItem.Click += new System.EventHandler(this.quickEnterToolStripMenuItem_Click);
+            this.MenuItemQuickEnter.Name = "MenuItemQuickEnter";
+            this.MenuItemQuickEnter.Size = new System.Drawing.Size(152, 22);
+            this.MenuItemQuickEnter.Text = "Quick Enter";
+            this.MenuItemQuickEnter.Click += new System.EventHandler(this.QuickGridEnterMenu_Click);
             // 
-            // pb1
+            // Pb1
             // 
-            this.pb1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pb1.Location = new System.Drawing.Point(3, 399);
-            this.pb1.Name = "pb1";
-            this.pb1.Size = new System.Drawing.Size(785, 23);
-            this.pb1.TabIndex = 4;
-            this.pb1.Visible = false;
+            this.Pb1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.Pb1.Location = new System.Drawing.Point(3, 399);
+            this.Pb1.Name = "Pb1";
+            this.Pb1.Size = new System.Drawing.Size(785, 23);
+            this.Pb1.TabIndex = 4;
+            this.Pb1.Visible = false;
             // 
             // tabControl1
             // 
@@ -229,34 +229,34 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1.Controls.Add(this.GridPanel);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.label6);
-            this.splitContainer1.Panel2.Controls.Add(this.multiWordsCheck);
-            this.splitContainer1.Panel2.Controls.Add(this.anagramSetupButton);
+            this.splitContainer1.Panel2.Controls.Add(this.ChkBoxMultipleWords);
+            this.splitContainer1.Panel2.Controls.Add(this.BtnAnagramSetup);
             this.splitContainer1.Panel2.Controls.Add(this.label5);
-            this.splitContainer1.Panel2.Controls.Add(this.anagramTextBox);
+            this.splitContainer1.Panel2.Controls.Add(this.TextBoxAnagramSetup);
             this.splitContainer1.Panel2.Controls.Add(this.label4);
-            this.splitContainer1.Panel2.Controls.Add(this.connectingLetterCheck);
+            this.splitContainer1.Panel2.Controls.Add(this.ChkBoxConnectingLetters);
             this.splitContainer1.Panel2.Controls.Add(this.label3);
-            this.splitContainer1.Panel2.Controls.Add(this.gameTypeCombo);
-            this.splitContainer1.Panel2.Controls.Add(this.findWordsButton);
-            this.splitContainer1.Panel2.Controls.Add(this.comboBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.ComBoxGameType);
+            this.splitContainer1.Panel2.Controls.Add(this.BtnFindWords);
+            this.splitContainer1.Panel2.Controls.Add(this.ComBoxGridSize);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Size = new System.Drawing.Size(785, 419);
             this.splitContainer1.SplitterDistance = 513;
             this.splitContainer1.TabIndex = 5;
             // 
-            // panel1
+            // GridPanel
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(513, 419);
-            this.panel1.TabIndex = 2;
+            this.GridPanel.AutoScroll = true;
+            this.GridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.GridPanel.Location = new System.Drawing.Point(0, 0);
+            this.GridPanel.Name = "GridPanel";
+            this.GridPanel.Size = new System.Drawing.Size(513, 419);
+            this.GridPanel.TabIndex = 2;
             // 
             // label6
             // 
@@ -268,31 +268,31 @@
             this.label6.TabIndex = 13;
             this.label6.Text = "Multiple Words:";
             // 
-            // multiWordsCheck
+            // ChkBoxMultipleWords
             // 
-            this.multiWordsCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.multiWordsCheck.AutoSize = true;
-            this.multiWordsCheck.Checked = true;
-            this.multiWordsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.multiWordsCheck.Enabled = false;
-            this.multiWordsCheck.Location = new System.Drawing.Point(111, 163);
-            this.multiWordsCheck.Name = "multiWordsCheck";
-            this.multiWordsCheck.Size = new System.Drawing.Size(15, 14);
-            this.multiWordsCheck.TabIndex = 12;
-            this.toolTip1.SetToolTip(this.multiWordsCheck, "Solutions can be made up of multiple words");
-            this.multiWordsCheck.UseVisualStyleBackColor = true;
+            this.ChkBoxMultipleWords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ChkBoxMultipleWords.AutoSize = true;
+            this.ChkBoxMultipleWords.Checked = true;
+            this.ChkBoxMultipleWords.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ChkBoxMultipleWords.Enabled = false;
+            this.ChkBoxMultipleWords.Location = new System.Drawing.Point(111, 163);
+            this.ChkBoxMultipleWords.Name = "ChkBoxMultipleWords";
+            this.ChkBoxMultipleWords.Size = new System.Drawing.Size(15, 14);
+            this.ChkBoxMultipleWords.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.ChkBoxMultipleWords, "Solutions can be made up of multiple words");
+            this.ChkBoxMultipleWords.UseVisualStyleBackColor = true;
             // 
-            // anagramSetupButton
+            // BtnAnagramSetup
             // 
-            this.anagramSetupButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.anagramSetupButton.Enabled = false;
-            this.anagramSetupButton.Location = new System.Drawing.Point(147, 191);
-            this.anagramSetupButton.Name = "anagramSetupButton";
-            this.anagramSetupButton.Size = new System.Drawing.Size(75, 23);
-            this.anagramSetupButton.TabIndex = 11;
-            this.anagramSetupButton.Text = "Setup";
-            this.anagramSetupButton.UseVisualStyleBackColor = true;
-            this.anagramSetupButton.Click += new System.EventHandler(this.anagramSetupButton_Click);
+            this.BtnAnagramSetup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnAnagramSetup.Enabled = false;
+            this.BtnAnagramSetup.Location = new System.Drawing.Point(147, 191);
+            this.BtnAnagramSetup.Name = "BtnAnagramSetup";
+            this.BtnAnagramSetup.Size = new System.Drawing.Size(75, 23);
+            this.BtnAnagramSetup.TabIndex = 11;
+            this.BtnAnagramSetup.Text = "Setup";
+            this.BtnAnagramSetup.UseVisualStyleBackColor = true;
+            this.BtnAnagramSetup.Click += new System.EventHandler(this.AnagramSetupBtn_Click);
             // 
             // label5
             // 
@@ -304,15 +304,15 @@
             this.label5.TabIndex = 10;
             this.label5.Text = "Anagram Entry:";
             // 
-            // anagramTextBox
+            // TextBoxAnagramSetup
             // 
-            this.anagramTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.anagramTextBox.Enabled = false;
-            this.anagramTextBox.Location = new System.Drawing.Point(111, 123);
-            this.anagramTextBox.Name = "anagramTextBox";
-            this.anagramTextBox.Size = new System.Drawing.Size(152, 20);
-            this.anagramTextBox.TabIndex = 9;
-            this.anagramTextBox.TextChanged += new System.EventHandler(this.anagramTextBox_TextChanged);
+            this.TextBoxAnagramSetup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxAnagramSetup.Enabled = false;
+            this.TextBoxAnagramSetup.Location = new System.Drawing.Point(111, 123);
+            this.TextBoxAnagramSetup.Name = "TextBoxAnagramSetup";
+            this.TextBoxAnagramSetup.Size = new System.Drawing.Size(152, 20);
+            this.TextBoxAnagramSetup.TabIndex = 9;
+            this.TextBoxAnagramSetup.TextChanged += new System.EventHandler(this.AnagramTextBox_TextChanged);
             // 
             // label4
             // 
@@ -324,19 +324,19 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "Connecting Letters:";
             // 
-            // connectingLetterCheck
+            // ChkBoxConnectingLetters
             // 
-            this.connectingLetterCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.connectingLetterCheck.AutoSize = true;
-            this.connectingLetterCheck.Checked = true;
-            this.connectingLetterCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.connectingLetterCheck.Location = new System.Drawing.Point(111, 91);
-            this.connectingLetterCheck.Name = "connectingLetterCheck";
-            this.connectingLetterCheck.Size = new System.Drawing.Size(15, 14);
-            this.connectingLetterCheck.TabIndex = 7;
-            this.toolTip1.SetToolTip(this.connectingLetterCheck, "Check if you only want solutions where the letters can join each other in the gri" +
+            this.ChkBoxConnectingLetters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ChkBoxConnectingLetters.AutoSize = true;
+            this.ChkBoxConnectingLetters.Checked = true;
+            this.ChkBoxConnectingLetters.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ChkBoxConnectingLetters.Location = new System.Drawing.Point(111, 91);
+            this.ChkBoxConnectingLetters.Name = "ChkBoxConnectingLetters";
+            this.ChkBoxConnectingLetters.Size = new System.Drawing.Size(15, 14);
+            this.ChkBoxConnectingLetters.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.ChkBoxConnectingLetters, "Check if you only want solutions where the letters can join each other in the gri" +
         "d, i.e. if you have to be able to draw a line between the letters.");
-            this.connectingLetterCheck.UseVisualStyleBackColor = true;
+            this.ChkBoxConnectingLetters.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -348,44 +348,44 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Problem Type:";
             // 
-            // gameTypeCombo
+            // ComBoxGameType
             // 
-            this.gameTypeCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gameTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.gameTypeCombo.FormattingEnabled = true;
-            this.gameTypeCombo.Items.AddRange(new object[] {
+            this.ComBoxGameType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ComBoxGameType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComBoxGameType.FormattingEnabled = true;
+            this.ComBoxGameType.Items.AddRange(new object[] {
             "Grid",
             "Anagram"});
-            this.gameTypeCombo.Location = new System.Drawing.Point(111, 11);
-            this.gameTypeCombo.Name = "gameTypeCombo";
-            this.gameTypeCombo.Size = new System.Drawing.Size(152, 21);
-            this.gameTypeCombo.TabIndex = 5;
-            this.gameTypeCombo.SelectedIndexChanged += new System.EventHandler(this.gameTypeCombo_SelectedIndexChanged);
+            this.ComBoxGameType.Location = new System.Drawing.Point(111, 11);
+            this.ComBoxGameType.Name = "ComBoxGameType";
+            this.ComBoxGameType.Size = new System.Drawing.Size(152, 21);
+            this.ComBoxGameType.TabIndex = 5;
+            this.ComBoxGameType.SelectedIndexChanged += new System.EventHandler(this.GameTypeComBox_SelectedIndexChanged);
             // 
-            // findWordsButton
+            // BtnFindWords
             // 
-            this.findWordsButton.Enabled = false;
-            this.findWordsButton.Location = new System.Drawing.Point(74, 288);
-            this.findWordsButton.Name = "findWordsButton";
-            this.findWordsButton.Size = new System.Drawing.Size(75, 23);
-            this.findWordsButton.TabIndex = 4;
-            this.findWordsButton.Text = "Find Words";
-            this.findWordsButton.UseVisualStyleBackColor = true;
-            this.findWordsButton.Click += new System.EventHandler(this.findWordsClick);
+            this.BtnFindWords.Enabled = false;
+            this.BtnFindWords.Location = new System.Drawing.Point(74, 288);
+            this.BtnFindWords.Name = "BtnFindWords";
+            this.BtnFindWords.Size = new System.Drawing.Size(106, 23);
+            this.BtnFindWords.TabIndex = 4;
+            this.BtnFindWords.Text = "Find Words";
+            this.BtnFindWords.UseVisualStyleBackColor = true;
+            this.BtnFindWords.Click += new System.EventHandler(this.FindWordBtn_Click);
             // 
-            // comboBox1
+            // ComBoxGridSize
             // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.ComBoxGridSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ComBoxGridSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComBoxGridSize.FormattingEnabled = true;
+            this.ComBoxGridSize.Items.AddRange(new object[] {
             "3 x 3",
             "4 x 4"});
-            this.comboBox1.Location = new System.Drawing.Point(111, 48);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(152, 21);
-            this.comboBox1.TabIndex = 1;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.ComBoxGridSize.Location = new System.Drawing.Point(111, 48);
+            this.ComBoxGridSize.Name = "ComBoxGridSize";
+            this.ComBoxGridSize.Size = new System.Drawing.Size(152, 21);
+            this.ComBoxGridSize.TabIndex = 1;
+            this.ComBoxGridSize.SelectedIndexChanged += new System.EventHandler(this.GridSizeComBox_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -399,13 +399,13 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.dictListBox);
-            this.tabPage2.Controls.Add(this.dictStatusLabel);
+            this.tabPage2.Controls.Add(this.ListBoxDictionary);
+            this.tabPage2.Controls.Add(this.LabelDictionaryStatus);
             this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.dictSizeLabel);
-            this.tabPage2.Controls.Add(this.pb1);
-            this.tabPage2.Controls.Add(this.wordInput);
-            this.tabPage2.Controls.Add(this.addWordButton);
+            this.tabPage2.Controls.Add(this.LabelDictionarySave);
+            this.tabPage2.Controls.Add(this.Pb1);
+            this.tabPage2.Controls.Add(this.TextBoxDictionarySearch);
+            this.tabPage2.Controls.Add(this.BtnAddWord);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -414,14 +414,14 @@
             this.tabPage2.Text = "Dictionary Info";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // dictListBox
+            // ListBoxDictionary
             // 
-            this.dictListBox.ContextMenuStrip = this.contextMenuStrip1;
-            this.dictListBox.FormattingEnabled = true;
-            this.dictListBox.Location = new System.Drawing.Point(11, 84);
-            this.dictListBox.Name = "dictListBox";
-            this.dictListBox.Size = new System.Drawing.Size(260, 277);
-            this.dictListBox.TabIndex = 8;
+            this.ListBoxDictionary.ContextMenuStrip = this.contextMenuStrip1;
+            this.ListBoxDictionary.FormattingEnabled = true;
+            this.ListBoxDictionary.Location = new System.Drawing.Point(11, 84);
+            this.ListBoxDictionary.Name = "ListBoxDictionary";
+            this.ListBoxDictionary.Size = new System.Drawing.Size(260, 277);
+            this.ListBoxDictionary.TabIndex = 8;
             // 
             // contextMenuStrip1
             // 
@@ -435,18 +435,18 @@
             this.removeWordToolStripMenuItem.Name = "removeWordToolStripMenuItem";
             this.removeWordToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.removeWordToolStripMenuItem.Text = "Remove Word";
-            this.removeWordToolStripMenuItem.Click += new System.EventHandler(this.removeWordToolStripMenuItem_Click);
+            this.removeWordToolStripMenuItem.Click += new System.EventHandler(this.RemoveWordMenu_Click);
             // 
-            // dictStatusLabel
+            // LabelDictionaryStatus
             // 
-            this.dictStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.dictStatusLabel.AutoSize = true;
-            this.dictStatusLabel.Location = new System.Drawing.Point(8, 383);
-            this.dictStatusLabel.Name = "dictStatusLabel";
-            this.dictStatusLabel.Size = new System.Drawing.Size(43, 13);
-            this.dictStatusLabel.TabIndex = 7;
-            this.dictStatusLabel.Text = "Status: ";
-            this.dictStatusLabel.Visible = false;
+            this.LabelDictionaryStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LabelDictionaryStatus.AutoSize = true;
+            this.LabelDictionaryStatus.Location = new System.Drawing.Point(8, 383);
+            this.LabelDictionaryStatus.Name = "LabelDictionaryStatus";
+            this.LabelDictionaryStatus.Size = new System.Drawing.Size(43, 13);
+            this.LabelDictionaryStatus.TabIndex = 7;
+            this.LabelDictionaryStatus.Text = "Status: ";
+            this.LabelDictionaryStatus.Visible = false;
             // 
             // label1
             // 
@@ -457,25 +457,25 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "Check For Word:";
             // 
-            // dictSizeLabel
+            // LabelDictionarySave
             // 
-            this.dictSizeLabel.AutoSize = true;
-            this.dictSizeLabel.Location = new System.Drawing.Point(8, 3);
-            this.dictSizeLabel.Name = "dictSizeLabel";
-            this.dictSizeLabel.Size = new System.Drawing.Size(89, 13);
-            this.dictSizeLabel.TabIndex = 5;
-            this.dictSizeLabel.Text = "Dictionary Size: 0";
+            this.LabelDictionarySave.AutoSize = true;
+            this.LabelDictionarySave.Location = new System.Drawing.Point(8, 3);
+            this.LabelDictionarySave.Name = "LabelDictionarySave";
+            this.LabelDictionarySave.Size = new System.Drawing.Size(89, 13);
+            this.LabelDictionarySave.TabIndex = 5;
+            this.LabelDictionarySave.Text = "Dictionary Size: 0";
             // 
             // dictSaver
             // 
-            this.dictSaver.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictSaver_DoWork);
-            this.dictSaver.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictSaver_RunWorkerCompleted);
+            this.dictSaver.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DictionarySaver_DoWork);
+            this.dictSaver.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.DictionarySaver_RunWorkerCompleted);
             // 
             // dictPopulateList
             // 
             this.dictPopulateList.WorkerSupportsCancellation = true;
-            this.dictPopulateList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.dictPopulateList_DoWork);
-            this.dictPopulateList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.dictPopulateList_RunWorkerCompleted);
+            this.dictPopulateList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.DictionaryPopulateList_DoWork);
+            this.dictPopulateList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.DictionaryPopulateList_RunWorkerCompleted);
             // 
             // MainWindow
             // 
@@ -487,8 +487,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
             this.Text = "Nick\'s Word Machine";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
-            this.Shown += new System.EventHandler(this.MainWindowShown);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_Closing);
+            this.Shown += new System.EventHandler(this.MainWindow_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -508,44 +508,44 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox wordInput;
-        private System.Windows.Forms.Button addWordButton;
+        private System.Windows.Forms.TextBox TextBoxDictionarySearch;
+        private System.Windows.Forms.Button BtnAddWord;
         private System.ComponentModel.BackgroundWorker dictLoader;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dictionaryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addFolderToolStripMenuItem;
-        private System.Windows.Forms.ProgressBar pb1;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemFile;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemDictionary;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemReset;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemAddFile;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemAddFolder;
+        private System.Windows.Forms.ProgressBar Pb1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Label dictSizeLabel;
+        private System.Windows.Forms.Label LabelDictionarySave;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Panel GridPanel;
+        private System.Windows.Forms.ComboBox ComBoxGridSize;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button findWordsButton;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gridToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem quickEnterToolStripMenuItem;
+        private System.Windows.Forms.Button BtnFindWords;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemExit;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemGrid;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemQuickEnter;
         private System.ComponentModel.BackgroundWorker dictSaver;
-        private System.Windows.Forms.Label dictStatusLabel;
-        private System.Windows.Forms.ListBox dictListBox;
+        private System.Windows.Forms.Label LabelDictionaryStatus;
+        private System.Windows.Forms.ListBox ListBoxDictionary;
         private System.ComponentModel.BackgroundWorker dictPopulateList;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox gameTypeCombo;
+        private System.Windows.Forms.ComboBox ComBoxGameType;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox connectingLetterCheck;
+        private System.Windows.Forms.CheckBox ChkBoxConnectingLetters;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemSave;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox anagramTextBox;
-        private System.Windows.Forms.Button anagramSetupButton;
+        private System.Windows.Forms.TextBox TextBoxAnagramSetup;
+        private System.Windows.Forms.Button BtnAnagramSetup;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.CheckBox multiWordsCheck;
+        private System.Windows.Forms.CheckBox ChkBoxMultipleWords;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem removeWordToolStripMenuItem;
     }

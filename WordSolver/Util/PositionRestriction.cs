@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WordSolver.Util
+﻿namespace WordSolver.Util
 {
     /// <summary>
     /// An enum representation of the restrictions on a letter's position in a word

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using WordSolver.Grid;
 using WordSolver.Util;
@@ -14,6 +11,8 @@ namespace WordSolver.Dictionary
     /// </summary>
     public class DictNode : TreeTraverse
     {
+        private const int WORD_SEARCH_LIMIT = 100;
+
         /// <summary>
         /// The char representation of the letter at this node
         /// </summary>
@@ -33,39 +32,40 @@ namespace WordSolver.Dictionary
         }
 
         /// <summary>
-        /// Cached value for the value of all the letters up to and including this node
+        /// The depth of the node in the tree
         /// </summary>
-        private String _word;
+        private readonly int _depth;
 
         /// <summary>
         /// Whether this node represents a word (i.e. it's a possible terminating node)
         /// </summary>
-        private bool IsWord;
-        
+        private bool _isWord;
+
         /// <summary>
-        /// The depth of the node in the tree
+        /// Cached value for the value of all the letters up to and including this node
         /// </summary>
-        private int Depth;
+        private String _word;
 
         /// <summary>
         /// Constructor used when there is no parent node, i.e. the root of the tree
         /// </summary>
         /// <param name="subword">The enumeration of the word to populate the tree</param>
         /// <param name="depth">The depth of the node</param>
+        /// <param name="parent">The node immediately above this node in the tree</param>
         public DictNode(CharEnumerator subword, int depth, TreeTraverse parent) : base(parent)
         {
-            Depth = depth;
+            _depth = depth;
             Letter = subword.Current;
             LetterEnum = LetterUtil.GetLetter(Letter);
 
             if (subword.MoveNext())
             {
-                Children.Add(new DictNode(subword, Depth + 1, this));
-                IsWord = false;
+                Children.Add(new DictNode(subword, _depth + 1, this));
+                _isWord = false;
             }
             else
             {
-                IsWord = true;
+                _isWord = true;
             }
         }
 
@@ -78,11 +78,11 @@ namespace WordSolver.Dictionary
         {
             if (!subword.MoveNext())
             {
-                if (IsWord)
+                if (_isWord)
                 {
                     return false;
                 }
-                IsWord = true;
+                _isWord = true;
                 return true;
             }
 
@@ -95,43 +95,21 @@ namespace WordSolver.Dictionary
                 }
             }
 
-            Children.Add(new DictNode(subword, Depth + 1, this));
+            Children.Add(new DictNode(subword, _depth + 1, this));
             return true;
-        }
-
-        /// <summary>
-        /// Find whether a word exists in this node and its subnodes
-        /// </summary>
-        /// <param name="subword">The enumeration of the word to find</param>
-        /// <returns>True if the word exists, false if not</returns>
-        public bool FindWord(CharEnumerator subword)
-        {
-            if (!subword.MoveNext())
-            {
-                return IsWord;
-            }
-
-            char c = subword.Current;
-            foreach (DictNode n in Children)
-            {
-                if (n.Letter == c)
-                {
-                    return n.FindWord(subword);
-                }
-            }
-
-            return false;
         }
 
         /// <summary>
         /// Find all words in the sub-tree from here
         /// </summary>
         /// <param name="node">The node in the LetterGrid that should align with this node in the dictionary tree</param>
-        public void FindAllWords(LetterGrid.Node node, bool allowMultiWords, Solutions.PartialSoln soln = null)
+        /// <param name="allowMultiWords">Allow matches which are made up of multiple words</param>
+        /// <param name="soln">A partial solution to start with</param>
+        public void FindAllWords(GridNode node, bool allowMultiWords, Solutions.PartialSoln soln = null)
         {
             node.Use();
 
-            if (IsWord)
+            if (_isWord)
             {
                 if (allowMultiWords)
                 {
@@ -141,8 +119,7 @@ namespace WordSolver.Dictionary
                         {
                             soln = new Solutions.PartialSoln();
                         }
-                        //soln.AddWord(this.ToString());
-                        this.Root.FindAllWords(node, allowMultiWords, new Solutions.PartialSoln(soln, this.ToString()));
+                        this.Root.FindAllWords(node, true, new Solutions.PartialSoln(soln, this.ToString()));
                     }
                     else
                     {
@@ -152,25 +129,19 @@ namespace WordSolver.Dictionary
                         }
                         else
                         {
-                            //Solutions.AddWord(new Solutions.PartialSoln(soln.AddWord(this.ToString())));
                             Solutions.AddWord(new Solutions.PartialSoln(soln, this.ToString()));
                         }
                     }
                 }
-                else if (Depth >= (Properties.Settings.Default.MinWordLength - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
+                else if (_depth >= (Properties.Settings.Default.MinWordLength - 1) && node.IsUsed && node.ParentGrid.CheckForMandatoryNodes())
                 {
                     Solutions.AddWord(this.ToString());
                 }
             }
 
-            /* if (IsWord && Depth >= (DictTree.MIN_WORD_LENGTH - 1) && node.UsedUp() && node.ParentGrid.CheckForMandatoryNodes())
+            foreach (GridNode n in node.GetAdjacentNodes())
             {
-                Solutions.AddWord(this.ToString());
-            } */
-            
-            foreach (LetterGrid.Node n in node.GetAdjacentNodes())
-            {
-                if (!n.IsUsed())
+                if (!n.IsUsed)
                 {
                     foreach (DictNode n2 in Children)
                     {
@@ -185,46 +156,67 @@ namespace WordSolver.Dictionary
             }
         }
 
-        public void WriteToStream(StreamWriter sw, bool sortFirst)
+        /// <summary>
+        /// Find whether a word exists in this node and its subnodes
+        /// </summary>
+        /// <param name="subword">The enumeration of the word to find</param>
+        /// <returns>True if the word exists, false if not</returns>
+        public bool FindWord(CharEnumerator subword)
         {
-            if (sortFirst)
+            if (!subword.MoveNext())
             {
-                Children.Sort(NodeSorter.GetInstance());
+                return _isWord;
             }
 
-            if (IsWord)
+            char c = subword.Current;
+// ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (DictNode n in Children)
             {
-                sw.WriteLine(this.ToString());
+                if (n.Letter == c)
+                {
+                    return n.FindWord(subword);
+                }
             }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Remove a partial word from the node and subnodes
+        /// </summary>
+        /// <param name="wordEnum">The enumerated word to remove</param>
+        /// <returns>True if the word was removed, false if it couldn't be found</returns>
+        public bool RemoveWord(CharEnumerator wordEnum)
+        {
+            if (!wordEnum.MoveNext())
+            {
+                bool wasWord = _isWord;
+                _isWord = false;
+                return wasWord;
+            }
+
+            char c = wordEnum.Current;
 
             foreach (DictNode n in Children)
             {
-                n.WriteToStream(sw, sortFirst);
-            }
-        }
-
-        public override string ToString()
-        {
-            if (_word == null)
-            {
-                if (Parent as DictNode != null)
+                if (n.Letter == c)
                 {
-                    _word = Parent.ToString() + Letter;
-                }
-                else
-                {
-                    _word = Char.ToString(Letter);
+                    return n.RemoveWord(wordEnum);
                 }
             }
-            return _word;
+            return false;
         }
 
+        /// <summary>
+        /// Append all words (up to the value of WORD_SEARCH_LIMIT) and append them to the list parameter
+        /// </summary>
+        /// <param name="solns">The list of solutions to be added to</param>
         public void WordSearch(List<String> solns)
         {
-            if (IsWord)
+            if (_isWord)
             {
                 solns.Add(this.ToString());
-                if (solns.Count >= 100)
+                if (solns.Count >= WORD_SEARCH_LIMIT)
                 {
                     return;
                 }
@@ -236,14 +228,19 @@ namespace WordSolver.Dictionary
             }
         }
 
+        /// <summary>
+        /// Search this node for all partial matches of a word (up to the value of WORD_SEARCH_LIMIT) and append them to the list parameter
+        /// </summary>
+        /// <param name="wordEnum">The partial word to match</param>
+        /// <param name="solns">The list of solutions to be added to</param>
         public void WordSearch(CharEnumerator wordEnum, List<String> solns)
         {
             if (!wordEnum.MoveNext())
             {
-                if (IsWord)
+                if (_isWord)
                 {
                     solns.Add(this.ToString());
-                    if (solns.Count >= 100)
+                    if (solns.Count >= WORD_SEARCH_LIMIT)
                     {
                         return;
                     }
@@ -252,7 +249,7 @@ namespace WordSolver.Dictionary
                 foreach (DictNode n in Children)
                 {
                     n.WordSearch(solns);
-                    if (solns.Count >= 100)
+                    if (solns.Count >= WORD_SEARCH_LIMIT)
                     {
                         return;
                     }
@@ -270,25 +267,47 @@ namespace WordSolver.Dictionary
             }
         }
 
-        public bool RemoveWord(CharEnumerator wordEnum)
+        /// <summary>
+        /// Serialise the node as part of a full tree write
+        /// </summary>
+        /// <param name="sw">The stream to write to</param>
+        /// <param name="sortFirst">True to alphabetically sort the child nodes first</param>
+        public void WriteToStream(StreamWriter sw, bool sortFirst)
         {
-            if (!wordEnum.MoveNext())
+            if (sortFirst)
             {
-                bool wasWord = IsWord;
-                IsWord = false;
-                return wasWord;
+                Children.Sort(NodeSorter.GetInstance());
             }
 
-            char c = wordEnum.Current;
+            if (_isWord)
+            {
+                sw.WriteLine(this.ToString());
+            }
 
             foreach (DictNode n in Children)
             {
-                if (n.Letter == c)
+                n.WriteToStream(sw, sortFirst);
+            }
+        }
+
+        /// <summary>
+        /// Override of Object.ToString() that is used to provide a human readable representation of the node
+        /// </summary>
+        /// <returns>The word representation of the node</returns>
+        public override string ToString()
+        {
+            if (_word == null)
+            {
+                if (Parent as DictNode != null)
                 {
-                    return n.RemoveWord(wordEnum);
+                    _word = Parent.ToString() + Letter;
+                }
+                else
+                {
+                    _word = Char.ToString(Letter);
                 }
             }
-            return false;
+            return _word;
         }
     }
 }

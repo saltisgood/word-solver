@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WordSolver.Grid
 {
@@ -12,14 +8,25 @@ namespace WordSolver.Grid
         /// Determines whether letters must be adjacent to one another in the grid. True means no, false means yes.
         /// </summary>
         public bool IsAnagram { get; private set; }
+
+        /// <summary>
+        /// Is the anagram at the maximum length allowed by the size of the game grid
+        /// </summary>
         public bool IsMaxAnagramLength
         {
             get
             {
+                if (!IsAnagram)
+                {
+                    throw new InvalidOperationException("Game is not an anagram");
+                }
                 return _anagramLength >= LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y;
             }
         }
 
+        /// <summary>
+        /// The current length of the anagram. Cannot be set to less than 0 or greater than the size of the grid.
+        /// </summary>
         public int AnagramLength 
         { 
             get
@@ -35,8 +42,15 @@ namespace WordSolver.Grid
                 _anagramLength = (value < 0 ) ? 0 : ((value <= LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y) ? value : LetterGrid.GRID_MAX_X * LetterGrid.GRID_MAX_Y);
             }
         }
+        /// <summary>
+        /// The private data store for AnagramLength
+        /// </summary>
+        private int _anagramLength;
 
-        public bool ConnectingLetters 
+        /// <summary>
+        /// Whether letters in the grid must be adjacent to one another
+        /// </summary>
+        public bool AreConnectingLettersRequired 
         {
             get
             {
@@ -44,15 +58,22 @@ namespace WordSolver.Grid
                 {
                     return false;
                 }
-                return _connectingLetters;
+                return _areConnectingLettersRequired;
             }
             set
             {
-                _connectingLetters = value;
+                _areConnectingLettersRequired = value;
             }
         }
+        /// <summary>
+        /// The private data store for AreConnectingLettersRequired
+        /// </summary>
+        private bool _areConnectingLettersRequired;
 
-        public bool MultiWords
+        /// <summary>
+        /// Whether word matches made up of multiple words are allowed
+        /// </summary>
+        public bool AreMultipleWordsAllowed
         {
             get
             {
@@ -60,17 +81,17 @@ namespace WordSolver.Grid
                 {
                     return false;
                 }
-                return _multiWords;
+                return _areMultipleWordsAllowed;
             }
             set
             {
-                _multiWords = value;
+                _areMultipleWordsAllowed = value;
             }
         }
-        private bool _multiWords;
-
-        private int _anagramLength;
-        private bool _connectingLetters;
+        /// <summary>
+        /// The private data store for AreMultipleWordsAllowed
+        /// </summary>
+        private bool _areMultipleWordsAllowed;
 
         /// <summary>
         /// Constructor used when the game is not an anagram. Can choose whether the letters need to be adjacent.
@@ -79,7 +100,7 @@ namespace WordSolver.Grid
         public GameOptions(bool connectingLetters)
         {
             IsAnagram = false;
-            _connectingLetters = connectingLetters;
+            _areConnectingLettersRequired = connectingLetters;
         }
 
         /// <summary>
